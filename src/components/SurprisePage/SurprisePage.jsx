@@ -4,6 +4,25 @@ import { motion } from 'framer-motion';
 // --- IMPORT YOUR BACKGROUND IMAGE ---
 import backgroundImage from '../../assets/img1.png';
 
+const PARTICLES = Array.from({ length: 15 }, (_, index) => ({
+  id: index,
+  left: `${(index * 67 + 11) % 100}%`,
+  top: `${(index * 43 + 7) % 90}%`,
+  distance: 100 + ((index * 37) % 201),
+  duration: 2 + ((index * 7) % 30) / 10,
+  delay: ((index * 11) % 20) / 10,
+}));
+
+const BALLOONS = Array.from({ length: 12 }, (_, index) => ({
+  id: index,
+  color: ['#FF5E5E', '#FFD166', '#06D6A0', '#118AB2', '#EF476F', '#F78C6B', '#9D4EDD'][index % 7],
+  left: (index * 37 + 9) % 100,
+  delay: ((index * 13) % 20) / 10,
+  duration: 8 + ((index * 7) % 50) / 10,
+  size: 30 + ((index * 17) % 30),
+  drift: ((index * 11) % 41) - 20,
+}));
+
 export default function SurprisePage({ onNextPage }) {
   const [step, setStep] = useState(1);
   const [noPosition, setNoPosition] = useState({ x: 0, y: 0 });
@@ -14,26 +33,17 @@ export default function SurprisePage({ onNextPage }) {
     setNoPosition({ x: randomX, y: randomY });
   };
 
-  const balloons = [...Array(12)].map((_, i) => ({
-    id: i,
-    color: ['#FF5E5E', '#FFD166', '#06D6A0', '#118AB2', '#EF476F', '#F78C6B', '#9D4EDD'][Math.floor(Math.random() * 7)],
-    left: Math.random() * 100,
-    delay: Math.random() * 2,
-    duration: Math.random() * 5 + 8,
-    size: Math.random() * 30 + 30,
-  }));
-
   const isImageStep = step === 5;
 
   return (
     <div
-      className={`relative flex min-h-screen items-center justify-center overflow-hidden transition-colors duration-1000 ${isImageStep
-        ? 'bg-black'
+      className={`relative z-10 flex min-h-screen items-center justify-center overflow-hidden transition-colors duration-1000 ${isImageStep
+        ? 'bg-black/65'
         : step === 6
-          ? 'bg-[#2a1a3a]'
+          ? 'bg-[#2a1a3a]/65'
           : step === 4
-            ? 'bg-[#1a0505]'
-            : 'bg-[#0a0a0f]'
+            ? 'bg-[#1a0505]/65'
+            : 'bg-[#0a0a0f]/65'
         }`}
     >
       {/* --- STEP 5: FULL BACKGROUND IMAGE --- */}
@@ -42,17 +52,18 @@ export default function SurprisePage({ onNextPage }) {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 1.5, ease: 'easeInOut' }}
-          className="absolute inset-0 bg-cover bg-center bg-no-repeat z-0"
+          className="absolute inset-0 bg-cover bg-center bg-no-repeat z-0 opacity-80"
           style={{ backgroundImage: `url(${backgroundImage})` }}
         />
       )}
 
       {/* --- FLOATING PARTICLES --- */}
-      {step < 4 && [...Array(15)].map((_, i) => (
-        <motion.div key={i} className="absolute h-2 w-2 rounded-full bg-red-500 blur-[2px]"
-          initial={{ x: Math.random() * window.innerWidth, y: Math.random() * window.innerHeight, opacity: 0 }}
-          animate={{ y: [null, Math.random() * -200 - 100], opacity: [0, 1, 0] }}
-          transition={{ duration: Math.random() * 3 + 2, repeat: Infinity, delay: Math.random() * 2 }}
+      {step < 4 && PARTICLES.map((particle) => (
+        <motion.div key={particle.id} className="absolute h-2 w-2 rounded-full bg-red-500 blur-[2px]"
+          style={{ left: particle.left, top: particle.top }}
+          initial={{ y: 0, opacity: 0 }}
+          animate={{ y: [0, -particle.distance], opacity: [0, 1, 0] }}
+          transition={{ duration: particle.duration, repeat: Infinity, delay: particle.delay }}
         />
       ))}
 
@@ -69,9 +80,9 @@ export default function SurprisePage({ onNextPage }) {
       )}
 
       {/* --- BALLOONS --- */}
-      {step === 4 && balloons.map((b) => (
+      {step === 4 && BALLOONS.map((b) => (
         <motion.div key={b.id} className="absolute bottom-[-100px] rounded-full" style={{ left: `${b.left}%`, width: b.size, height: b.size * 1.2, backgroundColor: b.color, boxShadow: `inset -5px -5px 10px rgba(0,0,0,0.2), 0 0 15px ${b.color}40` }}
-          initial={{ y: 0, opacity: 0 }} animate={{ y: [0, -window.innerHeight - 200], opacity: [0, 1, 1, 0], x: [0, Math.random() * 40 - 20, 0] }}
+          initial={{ y: 0, opacity: 0 }} animate={{ y: [0, -window.innerHeight - 200], opacity: [0, 1, 1, 0], x: [0, b.drift, 0] }}
           transition={{ duration: b.duration, repeat: Infinity, delay: b.delay, ease: 'linear' }}
         >
           <div className="absolute bottom-[-40px] left-1/2 w-0.5 h-10 bg-white/30 -translate-x-1/2" />

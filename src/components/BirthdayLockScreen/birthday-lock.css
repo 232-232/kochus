@@ -9,8 +9,8 @@
 .stripes {
   background: repeating-linear-gradient(
     90deg,
-    #dccbf7 0 56px,
-    #fff4cc 56px 112px
+    rgba(220, 203, 247, 0.68) 0 56px,
+    rgba(255, 244, 204, 0.68) 56px 112px
   );
 }
 

@@ -67,7 +67,7 @@ export default function BirthdayLockScreen({
   }, [press, backspace, submit]);
 
   return (
-    <main className="stripes ff-display relative flex min-h-screen flex-col items-center justify-center gap-6 overflow-hidden px-6 py-10 md:flex-row md:gap-0 md:px-12">
+    <main className="stripes ff-display relative z-10 flex min-h-screen flex-col items-center justify-center gap-6 overflow-hidden px-6 py-10 md:flex-row md:gap-0 md:px-12">
       {/* LEFT: polaroid area */}
       <section className="flex w-full flex-col items-center md:w-1/2">
         <h1

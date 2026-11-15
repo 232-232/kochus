@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from 'react';
 import BirthdayLockScreen from './components/BirthdayLockScreen/BirthdayLockScreen';
 import SurprisePage from './components/SurprisePage/SurprisePage';
+import HeavenGarden from './components/InvitationPage/HeavenGarden';
 import InvitationPage from './components/InvitationPage/InvitationPage';
 import backgroundMusic from './assets/bg.mp3';
 import './App.css';
@@ -30,6 +31,7 @@ export default function App() {
 
   return (
     <div className="app-container">
+      <HeavenGarden />
       {/* Global background music element */}
       <audio ref={audioRef} src={backgroundMusic} preload="auto" />
 
