@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import { Delete, Info } from "lucide-react"; // Removed PartyPopper
-import CouplePhoto from '../../assets/couple.jpeg'
+import CouplePhoto from '../../assets/couple.png'
 import WizardCat from '../../assets/wizard-cat.png'
 import "./birthday-lock.css";
 
@@ -19,7 +19,7 @@ const SCALLOP_CIRCLE = (() => {
 const KEYS = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "*", "0", "#"];
 
 export default function BirthdayLockScreen({
-  passcode = "0810",
+  passcode = "0112",
   couplePhoto = CouplePhoto,
   catImage = WizardCat,
   onUnlock, // <-- This is the magic button that switches pages
@@ -118,9 +118,8 @@ export default function BirthdayLockScreen({
               {Array.from({ length }).map((_, i) => (
                 <div
                   key={i}
-                  className={`ff-pixel flex h-14 w-11 items-center justify-center rounded-lg border-2 border-dashed bg-white/70 text-4xl leading-none text-[#5b3fa0] ${
-                    error ? "border-red-400" : "border-[#8f6fd6]"
-                  }`}
+                  className={`ff-pixel flex h-14 w-11 items-center justify-center rounded-lg border-2 border-dashed bg-white/70 text-4xl leading-none text-[#5b3fa0] ${error ? "border-red-400" : "border-[#8f6fd6]"
+                    }`}
                 >
                   <span className="translate-y-1.5">{code[i] ? "*" : ""}</span>
                 </div>
@@ -138,7 +137,7 @@ export default function BirthdayLockScreen({
             <div className="mt-3 flex items-center justify-center gap-1.5 rounded-full bg-[#8f6fd6]/20 px-4 py-1.5 mx-auto w-fit">
               <Info className="h-4 w-4 text-[#5b3fa0]" />
               <p className="ff-pixel text-sm text-[#5b3fa0]">
-                Hint: code (0810)
+                Hint: code (0--2)
               </p>
             </div>
 

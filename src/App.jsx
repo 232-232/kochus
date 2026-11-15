@@ -35,7 +35,7 @@ export default function App() {
 
       {page === 'lock' && (
         <BirthdayLockScreen
-          passcode="0810"
+          passcode="0112"
           onUnlock={() => setPage('surprise')}
         />
       )}

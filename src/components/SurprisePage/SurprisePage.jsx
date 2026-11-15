@@ -27,15 +27,14 @@ export default function SurprisePage({ onNextPage }) {
 
   return (
     <div
-      className={`relative flex min-h-screen items-center justify-center overflow-hidden transition-colors duration-1000 ${
-        isImageStep
-          ? 'bg-black'
-          : step === 6
-            ? 'bg-[#2a1a3a]'
-            : step === 4
-              ? 'bg-[#1a0505]'
-              : 'bg-[#0a0a0f]'
-      }`}
+      className={`relative flex min-h-screen items-center justify-center overflow-hidden transition-colors duration-1000 ${isImageStep
+        ? 'bg-black'
+        : step === 6
+          ? 'bg-[#2a1a3a]'
+          : step === 4
+            ? 'bg-[#1a0505]'
+            : 'bg-[#0a0a0f]'
+        }`}
     >
       {/* --- STEP 5: FULL BACKGROUND IMAGE --- */}
       {isImageStep && (
@@ -90,9 +89,9 @@ export default function SurprisePage({ onNextPage }) {
         {/* STEP 1 */}
         {step === 1 && (
           <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
-            <h1 className="mb-4 text-3xl font-bold text-white" style={{ fontFamily: 'Playfair Display, serif' }}>Have a look at it Madam Jii</h1>
+            <h1 className="mb-4 text-3xl font-bold text-white" style={{ fontFamily: 'Playfair Display, serif' }}>Have a look at it Kochuthaa</h1>
             <div className="mb-6 text-red-500">
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 mx-auto animate-pulse" fill="currentColor" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 mx-auto animate-pulse" fill="currentColor" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" /></svg>
             </div>
             <motion.button whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} onClick={() => setStep(2)} className="rounded-full bg-gradient-to-r from-red-600 to-orange-500 px-8 py-3 font-bold text-white shadow-[0_0_20px_rgba(255,0,0,0.6)] transition-all hover:shadow-[0_0_30px_rgba(255,0,0,0.9)]">Open Surprise</motion.button>
           </motion.div>
@@ -147,7 +146,7 @@ export default function SurprisePage({ onNextPage }) {
                 textShadow: '0 2px 12px rgba(0,0,0,0.7)',
               }}
             >
-              My Dearest Krithiiii,
+              My Dearest Kochussey,
             </h1>
 
             <div className="flex items-center justify-center gap-2 text-pink-200/90 mb-6">
@@ -161,24 +160,32 @@ export default function SurprisePage({ onNextPage }) {
               style={{ textShadow: '0 1px 8px rgba(0,0,0,0.85)' }}
             >
               <p className="text-center text-lg sm:text-xl font-semibold text-pink-100">
-                Happy 20th Birthday! ❤️🎂
+                Happy 23th Birthday! ❤️🎂
+              </p>
+
+
+
+              <p>
+                Welcome to 23, my love! ❤️✨ It feels so special to celebrate another birthday of yours, especially when I think about how far we've come together. Our story started back in 2014, when we were just kids in 6th standard, with innocent smiles, little conversations, and no idea that one day you would become such an important part of my life. Who knew that a school-time connection would turn into something so beautiful? 🥹❤️
               </p>
 
               <p>
-                Welcome to 20! ✨ I hope this new chapter of your life brings you closer to all the dreams you've been wishing for. May you always have the courage to chase what you truly want, the strength to overcome every challenge, and the happiness you deserve.
+                From those school days to today, so many things have changed. We've grown up, made memories, experienced different moments, and watched life take us through so many chapters. But one thing that will always be special to me is that you have been part of my journey since those childhood days. I feel lucky to have known you then and to still have you in my life now. ❤️
               </p>
 
               <p>
-                I hope one day you get to wear that uniform you've always admired, achieve everything you've dreamed of, and look back at these years with a big smile, knowing you made it. ❤️
+                As you turn 23, I wish you all the happiness, success, and love in this world. I hope you achieve every dream you've ever wished for. I hope one day you get to wear that uniform you've always admired, make yourself proud, and look back at everything with a beautiful smile, knowing that all your hard work was worth it. I'll always be cheering for you and believing in you. 🫶🏻
               </p>
 
               <p>
-                Keep smiling, keep dreaming, and keep being the amazing person you are. Wishing you a beautiful year filled with happiness, success, adventures, and countless little moments that make your heart happy.
+                No matter how old we grow or how many years pass, a part of me will always remember that little school-time story that began in 2014. Here's to more memories, more laughter, more adventures, and many more birthdays together.
               </p>
 
               <p className="text-center font-medium text-pink-100 pt-2 text-base">
-                Happy Birthday once again… have the most amazing 20th! 🫶🏻✨
+                Happy 23rd Birthday, my favourite person! ❤️
+                From our 6th standard days in 2014 to this beautiful chapter at 23, you will always be someone incredibly special to me. I love you! 🥹🫶🏻✨
               </p>
+
             </div>
 
             <div className="px-5 sm:px-8 pb-8">
@@ -207,14 +214,14 @@ export default function SurprisePage({ onNextPage }) {
           <motion.div initial={{ opacity: 0, scale: 0.8 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.8 }} className="flex flex-col items-center justify-center">
             <div className="mb-[-15px] z-10">
               <svg width="100" height="80" viewBox="0 0 100 80" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M20 30 L10 5 L40 20 Z" fill="#fce4ec" stroke="#5b3fa0" strokeWidth="2" strokeLinejoin="round"/>
-                <path d="M80 30 L90 5 L60 20 Z" fill="#fce4ec" stroke="#5b3fa0" strokeWidth="2" strokeLinejoin="round"/>
-                <circle cx="50" cy="45" r="30" fill="#fce4ec" stroke="#5b3fa0" strokeWidth="2"/>
+                <path d="M20 30 L10 5 L40 20 Z" fill="#fce4ec" stroke="#5b3fa0" strokeWidth="2" strokeLinejoin="round" />
+                <path d="M80 30 L90 5 L60 20 Z" fill="#fce4ec" stroke="#5b3fa0" strokeWidth="2" strokeLinejoin="round" />
+                <circle cx="50" cy="45" r="30" fill="#fce4ec" stroke="#5b3fa0" strokeWidth="2" />
                 <circle cx="35" cy="40" r="3" fill="#5b3fa0" /><circle cx="65" cy="40" r="3" fill="#5b3fa0" />
-                <ellipse cx="28" cy="50" rx="5" ry="3" fill="#f48fb1" opacity="0.6"/><ellipse cx="72" cy="50" rx="5" ry="3" fill="#f48fb1" opacity="0.6"/>
-                <path d="M45 50 Q50 55 55 50" stroke="#5b3fa0" strokeWidth="2" fill="none" strokeLinecap="round"/>
-                <path d="M50 50 L50 53" stroke="#5b3fa0" strokeWidth="2" strokeLinecap="round"/>
-                <circle cx="20" cy="65" r="8" fill="#fce4ec" stroke="#5b3fa0" strokeWidth="2"/><circle cx="80" cy="65" r="8" fill="#fce4ec" stroke="#5b3fa0" strokeWidth="2"/>
+                <ellipse cx="28" cy="50" rx="5" ry="3" fill="#f48fb1" opacity="0.6" /><ellipse cx="72" cy="50" rx="5" ry="3" fill="#f48fb1" opacity="0.6" />
+                <path d="M45 50 Q50 55 55 50" stroke="#5b3fa0" strokeWidth="2" fill="none" strokeLinecap="round" />
+                <path d="M50 50 L50 53" stroke="#5b3fa0" strokeWidth="2" strokeLinecap="round" />
+                <circle cx="20" cy="65" r="8" fill="#fce4ec" stroke="#5b3fa0" strokeWidth="2" /><circle cx="80" cy="65" r="8" fill="#fce4ec" stroke="#5b3fa0" strokeWidth="2" />
               </svg>
             </div>
             <div className="relative bg-[#fce4ec] border-4 border-[#8f6fd6] rounded-3xl p-6 mb-10 shadow-xl max-w-xs">

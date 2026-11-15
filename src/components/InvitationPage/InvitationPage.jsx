@@ -3,18 +3,18 @@ import { motion } from 'framer-motion';
 import './invitation.css';
 
 // --- IMPORT YOUR ASSETS HERE ---
-import photo1 from '../../assets/photo1.jpeg';
+import photo1 from '../../assets/photo1.JPEG';
 import photo2 from '../../assets/photo5.PNG';
-import photo3 from '../../assets/photo2.jpeg';
+import photo3 from '../../assets/photo2.PNG';
 import photo4 from '../../assets/photo3.PNG';
 import photo5 from '../../assets/photo4.PNG';
 import photo6 from '../../assets/photo6.PNG';
 
 // Videos
-import video1 from '../../assets/video1.mp4';
-import Video2 from '../../assets/IMG_2401.mp4';
-import video3 from '../../assets/IMG_2402.mp4';
-import video4 from '../../assets/IMG_2403.mp4';
+import video1 from '../../assets/IMG_2206.MP4';
+import Video2 from '../../assets/IMG_2205.MOV';
+import video3 from '../../assets/IMG_2202.MOV';
+import video4 from '../../assets/IMG_2207.MP4';
 
 const COLLAGE_PHOTOS = [photo1, photo2, photo3, photo4, photo5, photo6];
 const REELS = [Video2, video1, video3, video4];
@@ -33,7 +33,7 @@ function ReelVideo({ videoSrc, bgMusicRef, isLast }) {
 
   const resumeBgMusic = () => {
     const bgMusic = bgMusicRef?.current;
-    if (bgMusic && bgMusic.paused) bgMusic.play().catch(() => {});
+    if (bgMusic && bgMusic.paused) bgMusic.play().catch(() => { });
   };
 
   useEffect(() => {
@@ -230,7 +230,7 @@ export default function InvitationPage({ bgMusicRef }) {
         {/* --- HEADER --- */}
         <div className="text-center pt-10 pb-6 px-6">
           <h1 className="text-4xl font-serif text-[#8b6f5e] tracking-wide" style={{ fontFamily: 'Great Vibes, cursive' }}>
-            krithiiii
+            Kochuusey
           </h1>
           <div className="flex items-center justify-center gap-3 mt-2 text-xs tracking-[0.3em] text-[#8b6f5e]">
             <span className="w-8 h-px bg-[#8b6f5e]"></span>
@@ -342,7 +342,7 @@ export default function InvitationPage({ bgMusicRef }) {
             With love,
           </p>
           <p className="text-3xl text-[#8b6f5e] mt-2" style={{ fontFamily: 'Great Vibes, cursive' }}>
-            Sayooooj😜
+            mubiyeyyy
           </p>
         </div>
       </div>
