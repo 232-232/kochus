@@ -1,27 +1,67 @@
 import { memo, useRef } from 'react';
-import { motion, useReducedMotion, useScroll, useTransform } from 'framer-motion';
+import {
+  motion,
+  useReducedMotion,
+  useScroll,
+  useTransform,
+} from 'framer-motion';
 import { STORIES } from './storyData';
 
-const StoryCard = memo(function StoryCard({ story, index }) {
+const STICKY_TOP = 96;
+
+const StoryCard = memo(function StoryCard({ story, index, total }) {
   const sectionRef = useRef(null);
   const reduceMotion = useReducedMotion();
+
   const { scrollYProgress } = useScroll({
     target: sectionRef,
-    offset: ['start end', 'end start'],
+    offset: ['start end', 'start start'],
   });
-  const opacity = useTransform(scrollYProgress, [0, 0.35, 0.65, 1], [0, 1, 1, 0]);
-  const y = useTransform(scrollYProgress, [0, 0.5, 1], [28, 0, -18]);
-  const scale = useTransform(scrollYProgress, [0, 0.5, 1], [0.985, 1, 0.985]);
-  const rotateX = useTransform(scrollYProgress, [0, 0.5, 1], [1, 0, -0.5]);
-  const reversed = index % 2 === 1;
+
+  const { scrollYProgress: coverProgress } = useScroll({
+    target: sectionRef,
+    offset: ['end start', 'end end'],
+  });
+
+  // Entry animation
+  const entryY = useTransform(scrollYProgress, [0, 1], [120, 0]);
+  const entryScale = useTransform(scrollYProgress, [0, 1], [0.92, 1]);
+
+  // Cover animation (No opacity change, purely physical scale/rotate)
+  const coverScale = useTransform(coverProgress, [0, 1], [1, 0.92]);
+  const coverY = useTransform(coverProgress, [0, 1], [0, -40]);
+  const coverRotate = useTransform(coverProgress, [0, 1], [0, -2]);
+
+  const combinedY = useTransform([entryY, coverY], ([a, b]) => a + b);
+  const combinedScale = useTransform(
+    [entryScale, coverScale],
+    ([a, b]) => a * b
+  );
+
+  const isLast = index === total - 1;
+
+  const style = reduceMotion
+    ? undefined
+    : {
+        y: combinedY,
+        scale: combinedScale,
+        rotate: isLast ? 0 : coverRotate,
+        zIndex: index + 1,
+      };
 
   return (
-    <section ref={sectionRef} className="story-scene" aria-label={`Chapter ${index + 1}: ${story.year}`}>
-      <motion.article
-        className="story-card"
-        style={reduceMotion ? undefined : { opacity, y, scale, rotateX }}
-      >
-        <div className={`story-layout ${reversed ? 'reverse' : ''}`}>
+    <section
+      ref={sectionRef}
+      className="story-scene"
+      aria-label={`Chapter ${index + 1}: ${story.year}`}
+      style={{
+        position: 'sticky',
+        top: STICKY_TOP,
+        zIndex: index + 1,
+      }}
+    >
+      <motion.article className="story-card" style={style}>
+        <div className="story-layout">
           <div className="story-copy">
             <p className="story-kicker">
               <span>{story.season}</span>
@@ -41,12 +81,18 @@ const StoryCard = memo(function StoryCard({ story, index }) {
               loading={index === 0 ? 'eager' : 'lazy'}
               decoding="async"
               onError={(event) => {
-                if (!story.fallback || event.currentTarget.dataset.fallback === '1') return;
+                if (
+                  !story.fallback ||
+                  event.currentTarget.dataset.fallback === '1'
+                )
+                  return;
                 event.currentTarget.dataset.fallback = '1';
                 event.currentTarget.src = story.fallback;
               }}
             />
-            <figcaption>{story.season} · {story.year}</figcaption>
+            <figcaption>
+              {story.season} · {story.year}
+            </figcaption>
           </figure>
         </div>
       </motion.article>
@@ -56,9 +102,17 @@ const StoryCard = memo(function StoryCard({ story, index }) {
 
 export default function LoveStoryStack() {
   return (
-    <section className="story-track" aria-label="Our story through the years">
+    <section
+      className="story-track"
+      aria-label="Our story through the years"
+    >
       {STORIES.map((story, index) => (
-        <StoryCard key={`${story.year}-${story.title}`} story={story} index={index} />
+        <StoryCard
+          key={`${story.year}-${story.title}`}
+          story={story}
+          index={index}
+          total={STORIES.length}
+        />
       ))}
     </section>
   );
