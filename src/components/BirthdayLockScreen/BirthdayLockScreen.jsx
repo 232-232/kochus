@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import { Delete, Info } from "lucide-react"; // Removed PartyPopper
-import CouplePhoto from '../../assets/couple.png'
+import CouplePhoto from '../../assets/couple.PNG'
 import WizardCat from '../../assets/wizard-cat.png'
 import "./birthday-lock.css";
 
