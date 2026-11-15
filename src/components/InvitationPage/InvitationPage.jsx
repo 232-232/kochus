@@ -1,9 +1,12 @@
+import { useRef } from 'react';
 import LoveStoryStack from './LoveStoryStack';
 import ReelVideo from './ReelVideo';
 import { REELS } from './storyData';
 import './invitation.css';
 
 export default function InvitationPage({ bgMusicRef }) {
+  const activeVideoRef = useRef(null);
+
   const handleScrollToStory = () => {
     document.querySelector('.story-track')?.scrollIntoView({
       behavior: 'smooth',
@@ -18,7 +21,7 @@ export default function InvitationPage({ bgMusicRef }) {
         <h1>Kochuusey</h1>
         <p className="hero-line">Happy birthday</p>
         <p className="hero-note">
-          Scroll slowly. Each year stays, softens, and lets the next one bloom forward from the light behind it.
+          Scroll through the years, and watch each memory bloom into the next.
         </p>
         <button
           type="button"
@@ -40,6 +43,7 @@ export default function InvitationPage({ bgMusicRef }) {
             key={videoSrc}
             videoSrc={videoSrc}
             bgMusicRef={bgMusicRef}
+            activeVideoRef={activeVideoRef}
             isLast={index === REELS.length - 1}
           />
         ))}

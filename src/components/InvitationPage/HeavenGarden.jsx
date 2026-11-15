@@ -13,44 +13,36 @@
 
 /* ----------------------------- DATA -------------------------------------- */
 
+import { memo } from 'react';
+
 const SPECIES = {
   monarch:     { a: '#ffb347', b: '#e0580a', edge: '#17100a', vein: '#17100a', dots: '#fff7e8', ew: 9 },
-  morpho:      { a: '#8fdcff', b: '#0a40c0', edge: '#080f24', vein: '#0a1a44', dots: '#c9ecff', ew: 8, iris: true },
+  morpho:      { a: '#8fdcff', b: '#0a40c0', edge: '#080f24', vein: '#0a1a44', dots: '#c9ecff', ew: 8 },
   swallowtail: { a: '#fff4a6', b: '#f0c010', edge: '#14110c', vein: '#14110c', dots: '#f7dc52', ew: 8, bands: true, tail: true, eye: '#3f7cff' },
   painted:     { a: '#ffcf8a', b: '#e06a36', edge: '#2a1a12', vein: '#3a2216', dots: '#fff', ew: 10 },
   white:       { a: '#ffffff', b: '#d9e4ec', edge: '#5d6368', vein: '#9aa6ae', dots: null, ew: 3.5 },
-  lilac:       { a: '#f3e8ff', b: '#a589e0', edge: '#34264f', vein: '#5b4a82', dots: '#ffffff', ew: 7, iris: true },
+  lilac:       { a: '#f3e8ff', b: '#a589e0', edge: '#34264f', vein: '#5b4a82', dots: '#ffffff', ew: 7 },
 };
 
 const BUTTERFLIES = [
-  { id: 'b1', species: 'monarch',     left: '6%',  top: '12%', size: 92,  dur: '40s', delay: '-2s',  path: 'a', flap: '0.62s' },
-  { id: 'b2', species: 'morpho',      left: '70%', top: '8%',  size: 84,  dur: '46s', delay: '-8s',  path: 'b', flap: '0.7s' },
-  { id: 'b3', species: 'swallowtail', left: '40%', top: '18%', size: 78,  dur: '38s', delay: '-4s',  path: 'c', flap: '0.56s' },
-  { id: 'b4', species: 'lilac',       left: '82%', top: '28%', size: 66,  dur: '44s', delay: '-11s', path: 'd', flap: '0.5s' },
-  { id: 'b5', species: 'painted',     left: '18%', top: '36%', size: 62,  dur: '36s', delay: '-6s',  path: 'b', flap: '0.48s' },
-  { id: 'b6', species: 'monarch',     left: '54%', top: '6%',  size: 100, dur: '52s', delay: '-14s', path: 'a', flap: '0.74s' },
-  { id: 'b7', species: 'swallowtail', left: '28%', top: '22%', size: 70,  dur: '42s', delay: '-9s',  path: 'd', flap: '0.6s' },
-  { id: 'b8', species: 'white',       left: '88%', top: '48%', size: 58,  dur: '34s', delay: '-3s',  path: 'c', flap: '0.42s' },
+  { id: 'b1', species: 'monarch',     left: '7%',  top: '12%', size: 82, dur: '48s', delay: '-2s',  path: 'a', flap: '0.82s' },
+  { id: 'b2', species: 'morpho',      left: '72%', top: '9%',  size: 74, dur: '54s', delay: '-8s',  path: 'b', flap: '0.9s' },
+  { id: 'b3', species: 'swallowtail', left: '38%', top: '21%', size: 68, dur: '48s', delay: '-4s', path: 'c', flap: '0.78s' },
+  { id: 'b4', species: 'lilac',       left: '84%', top: '35%', size: 58, dur: '56s', delay: '-11s', path: 'd', flap: '0.86s' },
 ];
 
 const BEES = [
-  { id: 'e1', left: '12%', top: '58%', size: 54, dur: '22s', delay: '-1s',  path: 'a' },
-  { id: 'e2', left: '62%', top: '64%', size: 44, dur: '19s', delay: '-5s',  path: 'b' },
-  { id: 'e3', left: '38%', top: '72%', size: 50, dur: '26s', delay: '-8s',  path: 'c' },
-  { id: 'e4', left: '78%', top: '52%', size: 40, dur: '20s', delay: '-3s',  path: 'a' },
-  { id: 'e5', left: '24%', top: '46%', size: 42, dur: '24s', delay: '-10s', path: 'b' },
+  { id: 'e1', left: '14%', top: '58%', size: 48, dur: '30s', delay: '-1s',  path: 'a' },
+  { id: 'e2', left: '67%', top: '64%', size: 42, dur: '34s', delay: '-5s',  path: 'b' },
 ];
 
 const FLOWERS = [
-  { id: 'f1', left: '2%',  hue: 340, delay: '0s',   scale: 1.0,  kind: 'daisy' },
-  { id: 'f2', left: '12%', hue: 48,  delay: '1.1s', scale: 0.9,  kind: 'tulip' },
-  { id: 'f3', left: '22%', hue: 345, delay: '0.4s', scale: 1.15, kind: 'rose' },
-  { id: 'f4', left: '34%', hue: 280, delay: '1.8s', scale: 0.95, kind: 'daisy' },
-  { id: 'f5', left: '46%', hue: 355, delay: '0.7s', scale: 1.1,  kind: 'rose' },
-  { id: 'f6', left: '58%', hue: 330, delay: '1.4s', scale: 0.9,  kind: 'tulip' },
-  { id: 'f7', left: '70%', hue: 350, delay: '0.2s', scale: 1.2,  kind: 'daisy' },
-  { id: 'f8', left: '82%', hue: 8,   delay: '1.6s', scale: 1.0,  kind: 'rose' },
-  { id: 'f9', left: '92%', hue: 20,  delay: '0.9s', scale: 0.9,  kind: 'tulip' },
+  { id: 'f1', left: '3%',  hue: 340, delay: '0s',   scale: 1.0,  kind: 'daisy' },
+  { id: 'f2', left: '20%', hue: 48,  delay: '0.3s', scale: 0.9,  kind: 'tulip' },
+  { id: 'f3', left: '37%', hue: 345, delay: '0.6s', scale: 1.1,  kind: 'rose' },
+  { id: 'f4', left: '57%', hue: 280, delay: '0.9s', scale: 0.95, kind: 'daisy' },
+  { id: 'f5', left: '74%', hue: 355, delay: '1.2s', scale: 1.05, kind: 'rose' },
+  { id: 'f6', left: '90%', hue: 20,  delay: '1.5s', scale: 0.9,  kind: 'tulip' },
 ];
 
 function driftItems(kind, count) {
@@ -65,10 +57,10 @@ function driftItems(kind, count) {
   }));
 }
 
-const PETALS = driftItems('petal', 16);
-const SNOW = driftItems('snow', 18);
-const LEAVES = driftItems('leaf', 12);
-const MOTES = driftItems('mote', 26);
+const PETALS = driftItems('petal', 8);
+const SNOW = driftItems('snow', 5);
+const LEAVES = driftItems('leaf', 4);
+const MOTES = driftItems('mote', 8);
 
 const TONES = {
   petal: [['#ffc2d6', '#ff8fb7'], ['#ffe0ec', '#ffb3cb'], ['#ffffff', '#ffd6e4'], ['#ff9fc0', '#e8588f']],
@@ -78,7 +70,7 @@ const TONES = {
 
 /* ---------------------- natural flight-path generator -------------------- */
 
-function flightKeyframes(name, { ax, ay, fx, fy, ph, k2 = 0.28, steps = 72 }) {
+function flightKeyframes(name, { ax, ay, fx, fy, ph, k2 = 0.28, steps = 24 }) {
   const T = Math.PI * 2;
   let ang = null;
   let out = `@keyframes ${name}{`;
@@ -106,9 +98,8 @@ const FLY = {
   d: { ax: 22, ay: 8, fx: 3, fy: 2, ph: 0.6 },
 };
 const BUZZ = {
-  a: { ax: 9, ay: 7, fx: 2, fy: 3, ph: 0.4, k2: 0.4, steps: 96 },
-  b: { ax: 12, ay: 6, fx: 3, fy: 2, ph: 1.7, k2: 0.35, steps: 96 },
-  c: { ax: 8, ay: 9, fx: 1, fy: 4, ph: 3.0, k2: 0.45, steps: 96 },
+  a: { ax: 9, ay: 7, fx: 2, fy: 3, ph: 0.4, k2: 0.4, steps: 28 },
+  b: { ax: 12, ay: 6, fx: 3, fy: 2, ph: 1.7, k2: 0.35, steps: 28 },
 };
 
 const PATH_CSS =
@@ -119,55 +110,49 @@ const PATH_CSS =
 
 const CSS = `
 .hg{position:fixed;inset:0;overflow:hidden;pointer-events:none;z-index:0;contain:layout paint}
-.hg-glow{position:absolute;border-radius:50%;filter:blur(60px);mix-blend-mode:screen;animation:hg-pulse 14s ease-in-out infinite alternate}
-.hg-glow-a{width:60vw;height:60vw;left:-12vw;top:-18vw;background:radial-gradient(circle,rgba(255,226,170,.55),transparent 65%)}
-.hg-glow-b{width:50vw;height:50vw;right:-10vw;top:4vh;background:radial-gradient(circle,rgba(255,190,225,.45),transparent 65%);animation-delay:-5s}
-.hg-glow-c{width:70vw;height:40vw;left:15vw;bottom:-10vw;background:radial-gradient(circle,rgba(190,235,255,.4),transparent 70%);animation-delay:-9s}
-.hg-rays{position:absolute;inset:-10% -10% 30% -10%;background:linear-gradient(104deg,transparent 18%,rgba(255,244,214,.2) 25%,transparent 33%,transparent 44%,rgba(255,244,214,.14) 50%,transparent 58%,rgba(255,244,214,.18) 70%,transparent 78%);filter:blur(14px);mix-blend-mode:screen;animation:hg-rays 18s ease-in-out infinite alternate}
-@keyframes hg-pulse{from{opacity:.65;transform:scale(1)}to{opacity:1;transform:scale(1.12)}}
-@keyframes hg-rays{from{opacity:.5;transform:translateX(-2vw)}to{opacity:1;transform:translateX(2vw)}}
+.hg-glow{position:absolute;border-radius:50%;filter:blur(36px);opacity:.7}
+.hg-glow-a{width:52vw;height:52vw;left:-12vw;top:-18vw;background:radial-gradient(circle,rgba(255,226,170,.48),transparent 65%)}
+.hg-glow-b{width:48vw;height:48vw;right:-10vw;top:8vh;background:radial-gradient(circle,rgba(255,190,225,.4),transparent 65%)}
 
 /* drifting particles */
-.hg-drift{position:absolute;top:-8%;will-change:transform;animation:hg-fall linear infinite}
+.hg-drift{position:absolute;top:-8%;animation:hg-fall linear infinite}
 .hg-drift-petal{border-radius:100% 0 100% 0;box-shadow:inset -2px -2px 4px rgba(190,60,110,.25)}
 .hg-drift-leaf{border-radius:0 100% 0 100%;box-shadow:inset -2px -2px 5px rgba(0,0,0,.25)}
 .hg-drift-snow{border-radius:50%;box-shadow:0 0 6px rgba(255,255,255,.85);filter:blur(.4px)}
 @keyframes hg-fall{
- 0%{transform:perspective(500px) translate3d(0,-6vh,0) rotate3d(1,.4,.6,0deg);opacity:0}
+ 0%{transform:translate3d(0,-6vh,0) rotate(0deg);opacity:0}
  8%{opacity:1}
- 50%{transform:perspective(500px) translate3d(calc(var(--shift) * .6),52vh,0) rotate3d(1,.4,.6,200deg)}
- 100%{transform:perspective(500px) translate3d(var(--shift),112vh,0) rotate3d(1,.4,.6,420deg);opacity:.85}}
+ 50%{transform:translate3d(calc(var(--shift) * .6),52vh,0) rotate(180deg)}
+ 100%{transform:translate3d(var(--shift),112vh,0) rotate(360deg);opacity:.85}}
 .hg-mote{position:absolute;bottom:-3%;border-radius:50%;background:radial-gradient(circle,#fff6c8,rgba(255,220,120,0) 70%);animation:hg-rise linear infinite}
 @keyframes hg-rise{0%{transform:translate3d(0,0,0);opacity:0}15%{opacity:.9}50%{opacity:.4}100%{transform:translate3d(var(--shift),-70vh,0);opacity:0}}
 
 /* flyers */
 .hg-flyer{position:absolute;animation-timing-function:linear;animation-iteration-count:infinite;will-change:transform}
-.hg-tilt{width:100%;filter:drop-shadow(0 14px 9px rgba(40,25,10,.2))}
-.hg-butterfly .hg-tilt{animation:hg-bob var(--flap,.55s) ease-in-out infinite}
-.hg-bee .hg-tilt{animation:hg-vib .11s linear infinite;filter:drop-shadow(0 10px 6px rgba(40,25,10,.25))}
+.hg-tilt{width:100%}
+.hg-butterfly .hg-tilt{animation:hg-bob var(--flap,.8s) ease-in-out infinite}
+.hg-bee .hg-tilt{animation:hg-vib .4s ease-in-out infinite}
 .hg-bug{display:block;width:100%;height:auto;overflow:visible}
-@keyframes hg-bob{0%,100%{transform:translateY(0) scale(1)}50%{transform:translateY(-6%) scale(1.035)}}
-@keyframes hg-vib{0%{transform:translate(0,0)}33%{transform:translate(.7px,-.9px)}66%{transform:translate(-.7px,.6px)}100%{transform:translate(0,0)}}
-.hg-wing{transform-origin:100px 68px;animation:hg-flap var(--flap,.55s) cubic-bezier(.45,0,.55,1) infinite}
-@keyframes hg-flap{0%,100%{transform:scaleX(1) skewY(0deg)}50%{transform:scaleX(.14) skewY(-5deg)}}
-.hg-iris{animation:hg-iris 6s ease-in-out infinite alternate}
-@keyframes hg-iris{from{filter:hue-rotate(-14deg) saturate(1.05)}to{filter:hue-rotate(16deg) saturate(1.25) brightness(1.08)}}
-.hg-bw{transform-origin:42px 35px;animation:hg-wbuzz .055s ease-in-out infinite alternate}
-.hg-bw-hind{animation-direction:alternate-reverse;animation-duration:.06s}
+@keyframes hg-bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-2%)}}
+@keyframes hg-vib{0%,100%{transform:translate(0,0)}50%{transform:translate(.3px,-.4px)}}
+.hg-wing{transform-origin:100px 68px;animation:hg-flap var(--flap,.8s) ease-in-out infinite}
+@keyframes hg-flap{0%,100%{transform:scaleX(1)}50%{transform:scaleX(.32)}}
+.hg-bw{transform-origin:42px 35px;animation:hg-wbuzz .2s ease-in-out infinite alternate}
+.hg-bw-hind{animation-direction:alternate-reverse;animation-duration:.24s}
 @keyframes hg-wbuzz{from{transform:rotate(-16deg)}to{transform:rotate(20deg)}}
 
 /* garden */
 .hg-floor{position:absolute;left:0;right:0;bottom:0;height:42%}
 .hg-grass{position:absolute;left:0;bottom:0;width:100%;height:100%}
-.hg-mist{position:absolute;left:-10%;right:-10%;bottom:0;height:60%;background:radial-gradient(ellipse at 50% 100%,rgba(255,255,255,.55),transparent 70%);filter:blur(18px);animation:hg-mist 16s ease-in-out infinite alternate}
-@keyframes hg-mist{from{transform:translateX(-3%);opacity:.6}to{transform:translateX(3%);opacity:.95}}
-.hg-flower{position:absolute;bottom:-1%;width:calc(var(--scale) * clamp(72px,9vw,132px));animation:hg-grow 2.6s cubic-bezier(.2,.8,.2,1) backwards}
+.hg-mist{position:absolute;left:-10%;right:-10%;bottom:0;height:60%;background:radial-gradient(ellipse at 50% 100%,rgba(255,255,255,.4),transparent 70%)}
+.hg-flower{position:absolute;bottom:-1%;width:calc(var(--scale) * clamp(72px,9vw,132px));animation:hg-grow 1.2s cubic-bezier(.2,.8,.2,1) both}
 .hg-flower svg{display:block;width:100%;height:auto;overflow:visible}
-.hg-sway{transform-origin:50% 100%;animation:hg-sway 6s ease-in-out infinite alternate}
+.hg-sway{transform-origin:50% 100%;animation:hg-sway 9s ease-in-out infinite alternate}
 @keyframes hg-grow{from{transform:scale(.2) translateY(30%);opacity:0;transform-origin:50% 100%}to{transform:scale(1);opacity:1;transform-origin:50% 100%}}
-@keyframes hg-sway{from{transform:rotate(-2.4deg)}to{transform:rotate(2.4deg)}}
+@keyframes hg-sway{from{transform:rotate(-1.6deg)}to{transform:rotate(1.6deg)}}
 
-@media (prefers-reduced-motion:reduce){.hg *{animation-play-state:paused!important}}
+@media (max-width:640px){.hg-glow{filter:blur(28px)}.hg-floor{height:36%}}
+@media (prefers-reduced-motion:reduce){.hg *{animation:none!important;transition:none!important}}
 ${PATH_CSS}
 `;
 
@@ -203,10 +188,6 @@ function SharedDefs() {
           <stop offset="0" stopColor="#1f5a2b" />
           <stop offset="1" stopColor="#8fd36a" />
         </linearGradient>
-        <filter id="hg-fuzz" x="-10%" y="-10%" width="120%" height="120%">
-          <feTurbulence type="fractalNoise" baseFrequency=".85" numOctaves="2" result="n" />
-          <feDisplacementMap in="SourceGraphic" in2="n" scale="3.4" xChannelSelector="R" yChannelSelector="G" />
-        </filter>
       </defs>
     </svg>
   );
@@ -240,7 +221,7 @@ function Wing({ id, s }) {
     </g>
   );
   return (
-    <g className={`hg-wing${s.iris ? ' hg-iris' : ''}`}>
+    <g className="hg-wing">
       {detail(hind, HIND_VEINS, HIND_DOTS, 'ch')}
       {detail(FORE, FORE_VEINS, FORE_DOTS, 'cf')}
     </g>
@@ -274,7 +255,7 @@ function Butterfly({ spec }) {
           <Wing id={id} s={s} />
           <g transform="translate(200 0) scale(-1 1)"><Wing id={id} s={s} /></g>
           {/* body */}
-          <g filter="url(#hg-fuzz)">
+          <g>
             <path d="M96 74 C95 92 97 110 100 124 C103 110 105 92 104 74Z" fill="url(#hg-bodyg)" />
             <ellipse cx="100" cy="64" rx="5.2" ry="11" fill="url(#hg-bodyg)" />
             <circle cx="100" cy="50" r="4.6" fill="#1a110b" />
@@ -357,7 +338,7 @@ function Bee({ spec }) {
           <ellipse cx="25.5" cy="71" rx="4" ry="6.5" fill="#ff9a1f" /><ellipse cx="74.5" cy="71" rx="4" ry="6.5" fill="#ff9a1f" />
           <ellipse cx="24.5" cy="69" rx="1.6" ry="2.4" fill="#ffd27a" opacity=".8" /><ellipse cx="73.5" cy="69" rx="1.6" ry="2.4" fill="#ffd27a" opacity=".8" />
           {/* body */}
-          <g filter="url(#hg-fuzz)">
+          <g>
             <path d="M50 54 C34 56 30 82 40 98 C44 106 56 106 60 98 C70 82 66 56 50 54Z" fill={`url(#${id}-ab)`} />
             <g clipPath={`url(#${id}-cl)`} fill="#1a120b">
               <path d="M28 70 Q50 78 72 70 L72 77 Q50 85 28 77Z" />
@@ -553,15 +534,13 @@ function Drift({ item, kind }) {
 
 /* --------------------------------- ROOT ---------------------------------- */
 
-export default function HeavenGarden() {
+function HeavenGarden() {
   return (
     <div className="hg" aria-hidden="true">
       <style>{CSS}</style>
       <SharedDefs />
       <div className="hg-glow hg-glow-a" />
       <div className="hg-glow hg-glow-b" />
-      <div className="hg-glow hg-glow-c" />
-      <div className="hg-rays" />
 
       {PETALS.map((item) => <Drift key={item.id} item={item} kind="petal" />)}
       {SNOW.map((item) => <Drift key={item.id} item={item} kind="snow" />)}
@@ -580,3 +559,5 @@ export default function HeavenGarden() {
     </div>
   );
 }
+
+export default memo(HeavenGarden);

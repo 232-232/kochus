@@ -33,7 +33,7 @@ export default function App() {
     <div className="app-container">
       <HeavenGarden />
       {/* Global background music element */}
-      <audio ref={audioRef} src={backgroundMusic} preload="auto" />
+      <audio ref={audioRef} src={backgroundMusic} preload="none" />
 
       {page === 'lock' && (
         <BirthdayLockScreen

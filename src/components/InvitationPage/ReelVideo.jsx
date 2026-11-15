@@ -1,11 +1,13 @@
 import { useEffect, useRef, useState, useCallback } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 
-export default function ReelVideo({ videoSrc, bgMusicRef, isLast }) {
+export default function ReelVideo({ videoSrc, bgMusicRef, activeVideoRef, isLast }) {
   const videoRef = useRef(null);
+  const isVisibleRef = useRef(false);
   const [isMuted, setIsMuted] = useState(true);
   const [isPlaying, setIsPlaying] = useState(false);
   const [needsTap, setNeedsTap] = useState(false);
+  const reduceMotion = useReducedMotion();
 
   const pauseBgMusic = useCallback(() => {
     const bgMusic = bgMusicRef?.current;
@@ -25,52 +27,70 @@ export default function ReelVideo({ videoSrc, bgMusicRef, isLast }) {
     const video = videoRef.current;
     if (!video) return;
 
+    const playVisibleVideo = async () => {
+      if (!isVisibleRef.current) return;
+
+      const activeVideo = activeVideoRef.current;
+      if (activeVideo && activeVideo !== video) activeVideo.pause();
+      activeVideoRef.current = video;
+
+      video.muted = false;
+      try {
+        await video.play();
+        if (!isVisibleRef.current || activeVideoRef.current !== video) return;
+        setIsPlaying(true);
+        setIsMuted(false);
+        setNeedsTap(false);
+        pauseBgMusic();
+      } catch {
+        if (!isVisibleRef.current || activeVideoRef.current !== video) return;
+        video.muted = true;
+        try {
+          await video.play();
+          if (!isVisibleRef.current || activeVideoRef.current !== video) return;
+          setIsPlaying(true);
+          setIsMuted(true);
+          setNeedsTap(false);
+          resumeBgMusic();
+        } catch {
+          if (!isVisibleRef.current || activeVideoRef.current !== video) return;
+          activeVideoRef.current = null;
+          setIsPlaying(false);
+          setNeedsTap(true);
+          resumeBgMusic();
+        }
+      }
+    };
+
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            // Unmute attempt or muted autoplay
-            video.muted = false;
-            const playPromise = video.play();
-
-            if (playPromise !== undefined) {
-              playPromise
-                .then(() => {
-                  setIsPlaying(true);
-                  setIsMuted(false);
-                  setNeedsTap(false);
-                  pauseBgMusic();
-                })
-                .catch(() => {
-                  // Fallback to muted playback if sound autoplay is blocked
-                  video.muted = true;
-                  setIsMuted(true);
-                  video
-                    .play()
-                    .then(() => {
-                      setIsPlaying(true);
-                      setNeedsTap(false);
-                      pauseBgMusic();
-                    })
-                    .catch(() => {
-                      setIsPlaying(false);
-                      setNeedsTap(true);
-                      resumeBgMusic();
-                    });
-                });
-            }
+          isVisibleRef.current = entry.isIntersecting && entry.intersectionRatio >= 0.35;
+          if (isVisibleRef.current) {
+            playVisibleVideo();
           } else {
             video.pause();
-            setIsPlaying(false);
+            if (activeVideoRef.current === video) {
+              activeVideoRef.current = null;
+              resumeBgMusic();
+            }
           }
         });
       },
-      { threshold: 0.4, rootMargin: '60px 0px 60px 0px' }
+      { threshold: 0.35, rootMargin: '0px' }
     );
 
     observer.observe(video);
-    return () => observer.unobserve(video);
-  }, [bgMusicRef, pauseBgMusic, resumeBgMusic]);
+    return () => {
+      isVisibleRef.current = false;
+      observer.disconnect();
+      video.pause();
+      if (activeVideoRef.current === video) {
+        activeVideoRef.current = null;
+        resumeBgMusic();
+      }
+    };
+  }, [activeVideoRef, pauseBgMusic, resumeBgMusic]);
 
   const togglePlay = (e) => {
     e.stopPropagation();
@@ -78,24 +98,37 @@ export default function ReelVideo({ videoSrc, bgMusicRef, isLast }) {
     if (!video) return;
 
     if (video.paused) {
+      const activeVideo = activeVideoRef.current;
+      if (activeVideo && activeVideo !== video) activeVideo.pause();
+      activeVideoRef.current = video;
       video
         .play()
         .then(() => {
+          if (activeVideoRef.current !== video) return;
           setIsPlaying(true);
           setNeedsTap(false);
-          pauseBgMusic();
+          if (video.muted) resumeBgMusic();
+          else pauseBgMusic();
         })
         .catch(() => {
+          if (activeVideoRef.current !== video) return;
           video.muted = true;
           setIsMuted(true);
           video.play().then(() => {
+            if (activeVideoRef.current !== video) return;
             setIsPlaying(true);
             setNeedsTap(false);
-            pauseBgMusic();
+            resumeBgMusic();
+          }).catch(() => {
+            if (activeVideoRef.current !== video) return;
+            activeVideoRef.current = null;
+            setIsPlaying(false);
+            setNeedsTap(true);
           });
         });
     } else {
       video.pause();
+      if (activeVideoRef.current === video) activeVideoRef.current = null;
       setIsPlaying(false);
       resumeBgMusic();
     }
@@ -113,6 +146,7 @@ export default function ReelVideo({ videoSrc, bgMusicRef, isLast }) {
     } else {
       video.muted = true;
       setIsMuted(true);
+      resumeBgMusic();
     }
   };
 
@@ -123,10 +157,13 @@ export default function ReelVideo({ videoSrc, bgMusicRef, isLast }) {
         src={videoSrc}
         loop
         playsInline
-        preload="auto"
+        preload="none"
         className="reel-video"
+        onPause={() => setIsPlaying(false)}
+        onPlay={() => setIsPlaying(true)}
         onEnded={() => {
           setIsPlaying(false);
+          if (activeVideoRef.current === videoRef.current) activeVideoRef.current = null;
           resumeBgMusic();
         }}
       />
@@ -158,10 +195,10 @@ export default function ReelVideo({ videoSrc, bgMusicRef, isLast }) {
         {(!isPlaying || needsTap) && (
           <motion.div
             className="reel-badge"
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.8 }}
-            transition={{ duration: 0.25 }}
+            initial={reduceMotion ? { opacity: 0 } : { opacity: 0, scale: 0.8 }}
+            animate={reduceMotion ? { opacity: 1 } : { opacity: 1, scale: 1 }}
+            exit={reduceMotion ? { opacity: 0 } : { opacity: 0, scale: 0.8 }}
+            transition={{ duration: reduceMotion ? 0 : 0.25 }}
           >
             <span className="play-orb">
               <svg viewBox="0 0 24 24" aria-hidden="true">
@@ -174,21 +211,10 @@ export default function ReelVideo({ videoSrc, bgMusicRef, isLast }) {
 
       {/* Keep scrolling hint */}
       {isPlaying && !isLast && (
-        <motion.div
-          className="keep-scrolling"
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 1.2, duration: 0.6 }}
-        >
+        <div className="keep-scrolling">
           <span>Keep scrolling</span>
-          <motion.span
-            className="scroll-arrow"
-            animate={{ y: [0, 6, 0] }}
-            transition={{ duration: 1.6, repeat: Infinity, ease: 'easeInOut' }}
-          >
-            ↓
-          </motion.span>
-        </motion.div>
+          <span className="scroll-arrow" aria-hidden="true">↓</span>
+        </div>
       )}
     </div>
   );
