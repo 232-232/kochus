@@ -3,8 +3,8 @@ import { motion } from 'framer-motion';
 import './invitation.css';
 
 // --- IMPORT YOUR ASSETS HERE ---
-import photo1 from '../../assets/photo1.JPEG';
-import photo2 from '../../assets/photo5.png';
+import photo1 from '../../assets/photo1.jpeg';
+import photo2 from '../../assets/photo5.PNG';
 import photo3 from '../../assets/photo2.PNG';
 import photo4 from '../../assets/photo3.PNG';
 import photo5 from '../../assets/photo4.PNG';
