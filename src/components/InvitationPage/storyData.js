@@ -1,9 +1,9 @@
-import photo1 from '../../assets/photo1.jpeg';
-import photo2 from '../../assets/photo5.png';
-import photo3 from '../../assets/photo2.PNG';
-import photo4 from '../../assets/photo3.PNG';
-import photo5 from '../../assets/photo4.png';
-import photo6 from '../../assets/photo6.PNG';
+import photo1 from "../../assets/photo1.jpeg";
+import photo2 from "../../assets/photo5.PNG";
+import photo3 from "../../assets/photo2.PNG";
+import photo4 from "../../assets/photo3.PNG";
+import photo5 from "../../assets/photo4.PNG";
+import photo6 from "../../assets/photo6.PNG";
 import couple from '../../assets/couple.PNG';
 
 import video1 from '../../assets/IMG_2206.MP4';
