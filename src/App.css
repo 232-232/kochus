@@ -1,0 +1,5 @@
+.app-page-transition {
+  min-height: 100vh;
+  transform-origin: center;
+  will-change: opacity, transform;
+}

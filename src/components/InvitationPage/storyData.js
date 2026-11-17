@@ -16,10 +16,14 @@ import photo15 from "../../assets/photo15.jpeg";
 import photo16 from "../../assets/photo16.jpeg";
 import couple from '../../assets/couple.PNG';
 
-import video1 from '../../assets/IMG_2206.MP4';
-import video2 from '../../assets/IMG_2205.MOV';
-import video3 from '../../assets/IMG_2202.MOV';
-import video4 from '../../assets/IMG_2207.MP4';
+
+import video1 from "../../assets/IMG_2205.MOV";
+import video2 from "../../assets/IMG_2245.MOV";
+import video3 from "../../assets/IMG_2247.MOV";
+import video4 from "../../assets/IMG_2248.MP4";
+import video5 from '../../assets/IMG_2248.MP4';
+import video6 from '../../assets/IMG_2245.MOV';
+import video7 from '../../assets/IMG_2247.MOV';
 
 export const STORIES = [
   {
