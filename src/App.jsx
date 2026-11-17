@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import BirthdayLockScreen from './components/BirthdayLockScreen/BirthdayLockScreen';
 import ArrowHeartScene from './components/SurprisePage/ArrowHeartScene';
@@ -12,28 +12,23 @@ export default function App() {
   const [page, setPage] = useState('lock'); // 'lock' | 'heart' | 'surprise' | 'invitation'
   const audioRef = useRef(null);
 
-  // Handle music playback based on current page
-  useEffect(() => {
+  const handleUnlock = () => {
     const audio = audioRef.current;
-    if (!audio) return;
-
-    if (page === 'invitation') {
+    if (audio) {
       audio.volume = 0.4;
       audio.loop = true;
-      audio.play().catch(() => {
-        console.log('Autoplay blocked - waiting for user interaction');
+      audio.play().catch((error) => {
+        console.error('Unable to play bg.mp3 after unlock.', error);
       });
-    } else {
-      audio.pause();
-      audio.currentTime = 0;
     }
-  }, [page]);
+    setPage('heart');
+  };
 
   return (
     <div className="app-container">
       {page !== 'surprise' && page !== 'heart' && <HeavenGarden />}
       {/* Global background music element */}
-      <audio ref={audioRef} src={backgroundMusic} preload="none" />
+      <audio ref={audioRef} src={backgroundMusic} preload="auto" />
 
       <AnimatePresence mode="wait" initial={false}>
         <motion.div
@@ -47,7 +42,7 @@ export default function App() {
           {page === 'lock' && (
             <BirthdayLockScreen
               passcode="0112"
-              onUnlock={() => setPage('heart')}
+              onUnlock={handleUnlock}
             />
           )}
 
@@ -60,7 +55,7 @@ export default function App() {
           )}
 
           {page === 'invitation' && (
-            <InvitationPage bgMusicRef={audioRef} />
+            <InvitationPage />
           )}
         </motion.div>
       </AnimatePresence>

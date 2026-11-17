@@ -21,7 +21,6 @@ button:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
 #t,#h{color:#5b3a5a}
 .card{position:fixed;left:0;right:0;margin:0 auto;width:min(620px,calc(100vw - 24px));bottom:calc(76px + env(safe-area-inset-bottom,0px));max-height:66vh;max-height:calc(100dvh - 200px);display:flex;flex-direction:column;background:var(--card);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border:1px solid rgba(255,255,255,.6);border-radius:24px;box-shadow:0 10px 40px rgba(180,90,130,.25);opacity:0;transform:translateY(24px);pointer-events:none;transition:opacity .8s,transform .8s}
 .card,.card.on{position:absolute;left:auto;right:auto;bottom:auto;margin:-1px;width:1px;height:1px;max-height:1px;overflow:hidden;clip-path:inset(50%);backdrop-filter:none;-webkit-backdrop-filter:none;box-shadow:none;border:0;pointer-events:none;opacity:0}
-#lt #sp{display:none}
 #ls{overflow-y:auto;padding:26px 24px 22px;-webkit-overflow-scrolling:touch;overscroll-behavior:contain}
 #ls h1{font-size:clamp(24px,6vw,32px);margin:0 0 4px;padding-right:30px;font-style:italic;font-weight:600;line-height:1.15}
 #ls h2{font-size:clamp(16px,4.2vw,19px);margin:0 0 16px;font-weight:400}
@@ -30,31 +29,36 @@ button:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
 @keyframes up{from{opacity:0;transform:translateY(10px)}}
 @keyframes pulse{50%{transform:scale(1.04)}}
 #lx{position:absolute;right:10px;top:8px;width:36px;height:36px;padding:0;font-size:22px;line-height:1;border-radius:50%;z-index:2}
-#sp,#su{display:block;margin:10px auto 4px;padding:13px 26px;font-size:16px;font-weight:600;background:linear-gradient(135deg,#ff9ec0,#ffc98a);color:#4a2140;border:0;box-shadow:0 6px 20px rgba(255,140,170,.5);animation:pulse 2.4s ease-in-out infinite}
+#su{display:block;margin:10px auto 4px;padding:13px 26px;font-size:16px;font-weight:600;background:linear-gradient(135deg,#ff9ec0,#ffc98a);color:#4a2140;border:0;box-shadow:0 6px 20px rgba(255,140,170,.5);animation:pulse 2.4s ease-in-out infinite}
 #su{position:fixed;left:0;right:0;margin:0 auto;width:max-content;bottom:calc(84px + env(safe-area-inset-bottom,0px));opacity:0;pointer-events:none;transition:opacity 1s}
 #su.on{opacity:1;pointer-events:auto}
 #fin{position:fixed;inset:0;display:grid;place-content:center;gap:14px;text-align:center;padding:24px;color:#5b3a5a;pointer-events:none;opacity:0;transition:opacity 1.6s;background:radial-gradient(ellipse at center,rgba(255,230,240,.4),rgba(255,230,240,0) 70%)}
 #fin.on{opacity:1;pointer-events:auto}
 #fin h2{font-size:clamp(30px,9vw,60px);margin:0;font-style:italic;text-shadow:0 2px 18px rgba(255,255,255,.9)}
 #fin p{max-width:30ch;margin:0 auto;font-size:clamp(15px,4vw,19px);line-height:1.6;text-shadow:0 1px 10px rgba(255,255,255,.9)}
+#cd{font-weight:600;color:#9b5875}
 #fin button{justify-self:center;color:#5b3a5a}
 @media (max-width:420px){button{padding:9px 14px;font-size:13px}#b{gap:6px}#ls{padding:22px 18px 18px}}
-@media (prefers-reduced-motion:reduce){.card.on p,#sp{animation:none}.card{transition:none}}
+@media (prefers-reduced-motion:reduce){.card.on p,#su{animation:none}.card{transition:none}}
 </style></head><body>
 <canvas id="c"></canvas>
 <div id="t">Heaven Garden</div>
 <div id="h">Drag to look around · scroll or pinch to zoom</div>
-<div id="b"><button id="lb">Letter</button><button id="nx">Next</button><button id="bl">Bloom</button><button id="sn">Sound off</button></div>
+<div id="b"><button id="lb">Next</button><button id="nx">Skip</button></div>
 <div id="lt" class="card" role="dialog" aria-label="Birthday letter" aria-hidden="true"><button id="lx" aria-label="Close letter">×</button><div id="ls">
 <h1>My Dearest Kochussey ❤</h1><h2>Happy 23rd Birthday! ❤️🎂</h2>
-<p style="--i:0">Welcome to 23, my love! ❤️✨ It feels so special to celebrate another birthday of yours, especially when I think about how far we’ve come together. Our story started back in 2014, when we were just kids in 6th standard, with innocent smiles, little conversations, and no idea that one day you would become such an important part of my life. Who knew that a school-time connection would turn into something so beautiful? 🥹❤️</p>
-<p style="--i:1">From those school days to today, so many things have changed. We’ve grown up, made memories, experienced different moments, and watched life take us through so many chapters. But one thing that will always be special to me is that you have been part of my journey since those childhood days. I feel lucky to have known you then and to still have you in my life now. ❤️</p>
-<p style="--i:2">As you turn 23, I wish you all the happiness, success, and love in this world. I hope you achieve every dream you’ve ever wished for. I hope one day you get to wear that uniform you’ve always admired, make yourself proud, and look back at everything with a beautiful smile, knowing that all your hard work was worth it. I’ll always be cheering for you and believing in you. 🫶🏻</p>
-<p style="--i:3">No matter how old we grow or how many years pass, a part of me will always remember that little school-time story that began in 2014. Here’s to more memories, more laughter, more adventures, and many more birthdays together.</p>
-<p style="--i:4">Happy 23rd Birthday, my favourite person! ❤️ From our 6th standard days in 2014 to this beautiful chapter at 23, you will always be someone incredibly special to me. I love you! 🥹🫶🏻✨</p>
-<button id="sp">✦ One last surprise</button></div></div>
+<p style="--i:0">Welcome to 23, my love! ❤️✨ Our story began in 2014, when we were just kids in 6th standard, never imagining we'd become so special to each other. Who knew those little school-time moments would turn into something so beautiful? 🥹❤️</p>
+
+<p style="--i:1">So much has changed since then, but I'm grateful that you're still part of my life. From childhood memories to today, every chapter has been special, and I'll always cherish our journey together. ❤️</p>
+
+<p style="--i:2">As you turn 23, I wish you endless happiness, success, and love. May all your dreams come true, especially your dream of wearing that uniform you've always admired. I'll always believe in you and cheer for you! 🫶🏻</p>
+
+<p style="--i:3">No matter how many years pass, I'll always treasure our little story that started in 2014. Here's to more memories, laughter, adventures, and birthdays together! ❤️</p>
+
+<p style="--i:4">Happy 23rd Birthday, my favourite person! From 6th standard in 2014 to today, you'll always have a special place in my heart. I love you! 🥹🫶🏻✨</p>
+ </div></div>
 <button id="su">✦ One last surprise</button>
-<div id="fin"><h2>Happy Birthday, Kochussey ❤️</h2><p>Here’s to more memories, more laughter and many more birthdays together. I love you! 🫶🏻</p><button id="fb">Back to the garden</button></div>
+<div id="fin"><h2>Happy Birthday, Kochussey ❤️</h2><p>Here’s to more memories, more laughter and many more birthdays together. I love you! 🫶🏻</p><p id="cd" aria-live="polite"></p><button id="fb">Back to the garden</button></div>
 <div id="ld">Opening the garden…</div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script>
@@ -194,9 +198,9 @@ FL.forEach((f,k)=>{heads[f.type].setColorAt(f.i,tc.setHex(f.c));cens.setColorAt(
 const nW=FL.length-nLand,pads=new T.InstancedMesh(new T.CylinderGeometry(1,1,.04,20),mat(0x4fa046),nW);
 {const D=new T.Object3D();for(let k=0;k<nW;k++){const f=FL[nLand+k];D.position.set(f.x+(R()-.5)*.6,-.54,f.z+(R()-.5)*.6);D.scale.set(.8+R()*.5,1,.8+R()*.5);D.updateMatrix();pads.setMatrixAt(k,D.matrix)}}
 [...heads,stems,cens,pads].forEach(m=>{m.frustumCulled=false;scene.add(m)});
-const D=new T.Object3D(),V=new T.Vector3();D.rotation.order='YXZ';let tb=0;
+const D=new T.Object3D(),V=new T.Vector3();D.rotation.order='YXZ';
 function updFlowers(t){const gust=.5+.5*Math.sin(t*.35);
- FL.forEach((f,k)=>{let b=sm(0,1,(t-tb-f.delay)/f.dur);const br=1+.07*Math.sin(t*.9+f.ph),sw=f.water?.05:1;
+ FL.forEach((f,k)=>{let b=sm(0,1,(t-f.delay)/f.dur);const br=1+.07*Math.sin(t*.9+f.ph),sw=f.water?.05:1;
   const az=(Math.sin(t*1.3+f.x*.18+f.z*.12)*.06*(1+gust)+Math.sin(t*.7+f.ph)*.025)*sw,ax=Math.cos(t*1.1+f.z*.15+f.x*.1)*.05*(1+gust)*sw;
   const hh=Math.max(.001,f.h*(.2+.8*sm(0,.7,b)));
   D.position.set(f.x,f.y+(f.water?Math.sin(t*1.2+f.ph)*.03:0),f.z);D.rotation.set(ax,f.yaw,az);D.scale.set(1,1,1);D.updateMatrix();
@@ -322,14 +326,6 @@ const up=e=>{ptr.delete(e.pointerId);if(!ptr.size)drag=false};cv.addEventListene
 cv.addEventListener('wheel',e=>{e.preventDefault();td=cl(td*(1+e.deltaY*.001),5,90);last=performance.now()},{passive:false});
 function size(){ren.setSize(innerWidth,innerHeight,false);cam.aspect=innerWidth/innerHeight;cam.updateProjectionMatrix()}
 addEventListener('resize',size);size();
-document.getElementById('bl').onclick=()=>{tb=clock.getElapsedTime()};
-// sound
-let ac,mg,on=false;const sb=document.getElementById('sn');
-sb.onclick=()=>{try{if(!ac){ac=new AudioContext();mg=ac.createGain();mg.gain.value=0;mg.connect(ac.destination);
- [174.6,220,261.6,329.6,392,523.3].forEach((f,i)=>{const o=ac.createOscillator(),g=ac.createGain(),l=ac.createOscillator(),lg=ac.createGain();o.frequency.value=f;o.detune.value=(i%2?1:-1)*5;g.gain.value=.05;l.frequency.value=.07+i*.03;lg.gain.value=.03;l.connect(lg);lg.connect(g.gain);o.connect(g);g.connect(mg);o.start();l.start()});
- setInterval(()=>{if(!on)return;const o=ac.createOscillator(),g=ac.createGain(),n=[523.3,587.3,659.3,784,880,1046.5][R()*6|0],c=ac.currentTime;o.frequency.value=n;g.gain.setValueAtTime(0,c);g.gain.linearRampToValueAtTime(.06,c+.02);g.gain.exponentialRampToValueAtTime(.0001,c+3);o.connect(g);g.connect(mg);o.start();o.stop(c+3.2)},1800)}
- on=!on;ac.resume();mg.gain.setTargetAtTime(on?1:0,ac.currentTime,.8);sb.textContent=on?'Sound on':'Sound off'}catch(e){}};
-
 // birthday
 const heartTex=tex(g=>{g.fillStyle='#fff';g.beginPath();g.moveTo(64,112);g.bezierCurveTo(8,70,14,16,64,44);g.bezierCurveTo(114,16,120,70,64,112);g.fill()});
 const sign=(()=>{const c=document.createElement('canvas');c.width=1024;c.height=256;const g=c.getContext('2d');g.textAlign='center';g.shadowColor='rgba(255,140,185,.95)';g.shadowBlur=26;g.fillStyle='#fff';g.font='italic 700 84px Georgia,serif';g.fillText('Happy 23rd Birthday',512,98);g.fillStyle='#ffe3ee';g.font='italic 700 100px Georgia,serif';g.fillText('Kochussey ❤',512,210);
@@ -374,8 +370,12 @@ function layout(){const Hv=2*14*Math.tan(cam.fov*PI/360),Wv=Hv*cam.aspect,port=c
  pm.scale.set(pw,ph2,1);pwR.position.set(pw*.5-.1,ph2*.08,-.05);pwL.position.set(-pw*.5+.1,ph2*.08,-.05);pw1.scale.setScalar(ws);pw2.scale.set(-ws,ws,ws)}
 function setPanel(i){pi=i;curPort=cam.aspect<1;if(cur)cur.tex.dispose();const it=PT[i];cur=panelTex(it,curPort);pm.material.map=cur.tex;pm.material.needsUpdate=true;hold=it.p?4+it.p.split(/\s+/).length*.32:5;layout()}
 function toOut(){ps='out';pT=0;if(pi===PT.length-1)su.classList.add('on')}
-function nextPanel(){if(ps==='hold')toOut();else if(ps==='in')pT=Math.max(pT,2.6)}
-function startLetter(){fin.classList.remove('on');su.classList.remove('on');document.getElementById('h').style.display='none';fyT=2.5;td=Math.min(td,40);setPanel(0);ps='in';pT=0}
+function nextPanel(){if(ps==='hold')toOut();else if(ps==='in'||ps==='out')pT=Math.max(pT,2.6)}
+const controls=document.getElementById('b'),hint=document.getElementById('h'),countdown=document.getElementById('cd');
+let autoStartTimer,finaleTimer,countdownTimer,partyTimer;
+function startLetter(){clearTimeout(autoStartTimer);fin.classList.remove('on');su.classList.remove('on');hint.style.display='none';controls.style.display='flex';fyT=2.5;td=Math.min(td,40);setPanel(0);ps='in';pT=0}
+function advancePanel(){if(ps==='wait')startLetter();else nextPanel()}
+function skipStory(){clearTimeout(autoStartTimer);ps='done';pT=0;pg.visible=false;hint.style.display='none';controls.style.display='none';su.classList.add('on')}
 function updPanel(t,dt){if(ps==='wait'||ps==='done'){pg.visible=false;return}
  if((cam.aspect<1)!==curPort)setPanel(pi);
  pg.visible=true;pT+=dt;const D=14,Hv=2*D*Math.tan(cam.fov*PI/360),Wv=Hv*cam.aspect,side=pi%2?1:-1;
@@ -386,10 +386,28 @@ function updPanel(t,dt){if(ps==='wait'||ps==='done'){pg.visible=false;return}
  pg.position.set(x,y,z);pg.scale.setScalar(sc);pg.rotation.z=Math.sin(t*1.3)*.05-(ps==='hold'?0:x*.01);
  pm.material.opacity=op;wmP.opacity=op*.8;const a=.15+.75*(.5+.5*Math.sin(t*rate));pwR.rotation.y=-a;pwL.rotation.y=a}
 
-document.getElementById('lb').onclick=startLetter;document.getElementById('nx').onclick=nextPanel;
-su.onclick=()=>{su.classList.remove('on');fyT=15;td=42;tp=.2;last=performance.now();lanOn=1;let n=0;const iv=setInterval(()=>{burst();if(++n>16)clearInterval(iv)},480);setTimeout(()=>fin.classList.add('on'),3500);setTimeout(()=>window.parent.postMessage({type:'heaven-garden:navigate-invitation'},window.location.origin),8500)};
-document.getElementById('fb').onclick=()=>{fin.classList.remove('on');fyT=2.5;td=28;tp=.22;lanOn=0};
-setTimeout(startLetter,6000);
+document.getElementById('lb').onclick=advancePanel;document.getElementById('nx').onclick=skipStory;
+su.onclick=()=>{
+ su.classList.remove('on');fyT=15;td=42;tp=.2;last=performance.now();lanOn=1;
+ let n=0;partyTimer=setInterval(()=>{burst();if(++n>16){clearInterval(partyTimer);partyTimer=null}},480);
+ finaleTimer=setTimeout(()=>{
+  fin.classList.add('on');
+  let seconds=5;
+  countdown.textContent=`Opening your invitation in ${seconds}...`;
+  countdownTimer=setInterval(()=>{
+   seconds-=1;
+   if(seconds===0){clearInterval(countdownTimer);countdownTimer=null;countdown.textContent='Opening your invitation...';window.parent.postMessage({type:'heaven-garden:navigate-invitation'},window.location.origin)}
+   else countdown.textContent=`Opening your invitation in ${seconds}...`;
+  },1000);
+ },3500);
+};
+document.getElementById('fb').onclick=()=>{
+ clearTimeout(finaleTimer);clearInterval(countdownTimer);clearInterval(partyTimer);
+ finaleTimer=countdownTimer=partyTimer=null;countdown.textContent='';
+ fin.classList.remove('on');fyT=2.5;td=28;tp=.22;lanOn=0;
+ su.classList.add('on');
+};
+autoStartTimer=setTimeout(startLetter,6000);
 // loop
 const clock=new T.Clock(),F=new T.Vector3();let started=false;
 ren.setAnimationLoop(()=>{const dt=Math.min(.05,clock.getDelta()),t=clock.elapsedTime;

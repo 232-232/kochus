@@ -4,7 +4,7 @@ import ReelVideo from './ReelVideo';
 import { REELS } from './storyData';
 import './invitation.css';
 
-export default function InvitationPage({ bgMusicRef }) {
+export default function InvitationPage() {
   const activeVideoRef = useRef(null);
 
   const handleScrollToStory = () => {
@@ -42,7 +42,6 @@ export default function InvitationPage({ bgMusicRef }) {
           <ReelVideo
             key={videoSrc}
             videoSrc={videoSrc}
-            bgMusicRef={bgMusicRef}
             activeVideoRef={activeVideoRef}
             isLast={index === REELS.length - 1}
           />
