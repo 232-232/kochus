@@ -5,7 +5,7 @@ import ArrowHeartScene from './components/SurprisePage/ArrowHeartScene';
 import SurprisePage from './components/SurprisePage/SurprisePage';
 import HeavenGarden from './components/InvitationPage/HeavenGarden';
 import InvitationPage from './components/InvitationPage/InvitationPage';
-import backgroundMusic from './assets/bg.mp3';
+import backgroundMusic from './assets/bg.m4a';
 import './App.css';
 
 export default function App() {
@@ -22,7 +22,7 @@ export default function App() {
       audio.muted = false;
       audio.loop = true;
       audio.play().catch((error) => {
-        console.error('Unable to play bg.mp3 after unlock.', error);
+        console.error('Unable to play bg.m4a after unlock.', error);
       });
     }
     setHeartCurtainVisible(true);

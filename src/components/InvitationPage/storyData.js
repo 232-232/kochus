@@ -20,10 +20,8 @@ import couple from '../../assets/couple.PNG';
 import video1 from "../../assets/IMG_2205.MOV";
 import video2 from "../../assets/IMG_2245.MOV";
 import video3 from "../../assets/IMG_2247.MOV";
-import video4 from "../../assets/IMG_2248.MP4";
-import video5 from '../../assets/IMG_2248.MP4';
-import video6 from '../../assets/IMG_2245.MOV';
-import video7 from '../../assets/IMG_2247.MOV';
+// import video4 from "../../assets/IMG_2248.MP4";
+
 
 export const STORIES = [
   {
@@ -127,4 +125,4 @@ export const STORIES = [
   },
 ];
 
-export const REELS = [video2, video1, video3, video4];
+export const REELS = [video1,video2, video3,];
