@@ -29,7 +29,7 @@ export default function ReelVideo({ videoSrc, activeVideoRef, onPlaybackChange, 
       if (activeVideo && activeVideo !== video) activeVideo.pause();
       activeVideoRef.current = video;
 
-      video.muted = true;
+      video.muted = false;
       try {
         await video.play();
         if (!isVisibleRef.current || activeVideoRef.current !== video) return;
@@ -83,7 +83,7 @@ export default function ReelVideo({ videoSrc, activeVideoRef, onPlaybackChange, 
       const activeVideo = activeVideoRef.current;
       if (activeVideo && activeVideo !== video) activeVideo.pause();
       activeVideoRef.current = video;
-      video.muted = true;
+      video.muted = false;
       video
         .play()
         .then(() => {
@@ -115,7 +115,6 @@ export default function ReelVideo({ videoSrc, activeVideoRef, onPlaybackChange, 
         src={videoSrc}
         loop
         playsInline
-        muted
         preload="none"
         className="reel-video"
         onPause={() => {
