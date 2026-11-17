@@ -1,12 +1,22 @@
 import { useEffect, useRef, useState } from 'react';
 import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 
-export default function ReelVideo({ videoSrc, activeVideoRef, isLast }) {
+export default function ReelVideo({ videoSrc, activeVideoRef, onPlaybackChange, isLast }) {
   const videoRef = useRef(null);
   const isVisibleRef = useRef(false);
   const [isPlaying, setIsPlaying] = useState(false);
   const [needsTap, setNeedsTap] = useState(false);
   const reduceMotion = useReducedMotion();
+
+  const notifyPlayback = (playing) => {
+    const video = videoRef.current;
+    if (!video) return;
+    if (playing) {
+      if (activeVideoRef.current === video) onPlaybackChange?.(true);
+    } else if (activeVideoRef.current === video || activeVideoRef.current === null) {
+      onPlaybackChange?.(false);
+    }
+  };
 
   useEffect(() => {
     const video = videoRef.current;
@@ -28,6 +38,7 @@ export default function ReelVideo({ videoSrc, activeVideoRef, isLast }) {
       } catch {
         if (!isVisibleRef.current || activeVideoRef.current !== video) return;
         activeVideoRef.current = null;
+        onPlaybackChange?.(false);
         setIsPlaying(false);
         setNeedsTap(true);
       }
@@ -43,6 +54,7 @@ export default function ReelVideo({ videoSrc, activeVideoRef, isLast }) {
             video.pause();
             if (activeVideoRef.current === video) {
               activeVideoRef.current = null;
+              onPlaybackChange?.(false);
             }
           }
         });
@@ -57,9 +69,10 @@ export default function ReelVideo({ videoSrc, activeVideoRef, isLast }) {
       video.pause();
       if (activeVideoRef.current === video) {
         activeVideoRef.current = null;
+        onPlaybackChange?.(false);
       }
     };
-  }, [activeVideoRef]);
+  }, [activeVideoRef, onPlaybackChange]);
 
   const togglePlay = (e) => {
     e.stopPropagation();
@@ -81,12 +94,16 @@ export default function ReelVideo({ videoSrc, activeVideoRef, isLast }) {
         .catch(() => {
           if (activeVideoRef.current !== video) return;
           activeVideoRef.current = null;
+          onPlaybackChange?.(false);
           setIsPlaying(false);
           setNeedsTap(true);
         });
     } else {
       video.pause();
-      if (activeVideoRef.current === video) activeVideoRef.current = null;
+      if (activeVideoRef.current === video) {
+        activeVideoRef.current = null;
+        onPlaybackChange?.(false);
+      }
       setIsPlaying(false);
     }
   };
@@ -101,8 +118,14 @@ export default function ReelVideo({ videoSrc, activeVideoRef, isLast }) {
         muted
         preload="none"
         className="reel-video"
-        onPause={() => setIsPlaying(false)}
-        onPlay={() => setIsPlaying(true)}
+        onPause={() => {
+          setIsPlaying(false);
+          notifyPlayback(false);
+        }}
+        onPlay={() => {
+          setIsPlaying(true);
+          notifyPlayback(true);
+        }}
       />
 
       {/* Play/Pause Center Indicator */}

@@ -1,11 +1,13 @@
-import { useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import LoveStoryStack from './LoveStoryStack';
 import ReelVideo from './ReelVideo';
 import { REELS } from './storyData';
 import './invitation.css';
 
-export default function InvitationPage() {
+export default function InvitationPage({ onReelPlaybackChange }) {
   const activeVideoRef = useRef(null);
+
+  useEffect(() => () => onReelPlaybackChange?.(false), [onReelPlaybackChange]);
 
   const handleScrollToStory = () => {
     document.querySelector('.story-track')?.scrollIntoView({
@@ -43,6 +45,7 @@ export default function InvitationPage() {
             key={videoSrc}
             videoSrc={videoSrc}
             activeVideoRef={activeVideoRef}
+            onPlaybackChange={onReelPlaybackChange}
             isLast={index === REELS.length - 1}
           />
         ))}

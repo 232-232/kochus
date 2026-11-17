@@ -14,7 +14,7 @@ canvas{position:fixed;inset:0;width:100%;height:100%;touch-action:none;cursor:gr
 #b{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(18px + env(safe-area-inset-bottom,0px));display:flex;gap:10px}
 button{font:inherit;font-size:14px;color:var(--ink);background:var(--glass);border:1px solid rgba(255,255,255,.5);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);padding:10px 18px;border-radius:24px;cursor:pointer}
 button:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
-#ld{position:fixed;inset:0;display:grid;place-items:center;background:var(--bg);font-size:18px;transition:opacity 1.5s}
+#ld{position:fixed;inset:0;display:grid;place-items:center;background:var(--bg);font-size:18px;transition:opacity .55s}
 :root{--card:rgba(255,250,244,.82)}
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--card:rgba(38,26,60,.84)}}
 :root[data-theme="dark"]{--card:rgba(38,26,60,.84)}
@@ -90,7 +90,7 @@ scene.add(new T.Mesh(new T.SphereGeometry(600,32,16),new T.ShaderMaterial({side:
 vertexShader:'varying vec3 p;void main(){p=position;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.);}',
 fragmentShader:'varying vec3 p;uniform vec3 s;void main(){vec3 d=normalize(p);float u=max(d.y,0.);vec3 c=mix(vec3(.98,.90,.82),vec3(.38,.66,.98),pow(u,.45));float k=max(dot(d,s),0.);c+=vec3(1.,.72,.45)*pow(k,6.)*.45+vec3(1.,.9,.7)*pow(k,64.)*.6;gl_FragColor=vec4(c,1.);}'})));
 
-function tex(f){const c=document.createElement('canvas');c.width=c.height=128;const g=c.getContext('2d');f(g);return new T.CanvasTexture(c)}
+function tex(f,n=128){const c=document.createElement('canvas');c.width=c.height=n;const g=c.getContext('2d');f(g,n);return new T.CanvasTexture(c)}
 const glowTex=tex(g=>{const r=g.createRadialGradient(64,64,0,64,64,64);r.addColorStop(0,'rgba(255,255,255,1)');r.addColorStop(.3,'rgba(255,240,200,.5)');r.addColorStop(1,'rgba(255,230,180,0)');g.fillStyle=r;g.fillRect(0,0,128,128)});
 const cloudTex=tex(g=>{const r=g.createRadialGradient(64,64,0,64,64,64);r.addColorStop(0,'rgba(255,255,255,.95)');r.addColorStop(.5,'rgba(255,250,245,.5)');r.addColorStop(1,'rgba(255,250,245,0)');g.fillStyle=r;g.fillRect(0,0,128,128)});
 const petalTex=tex(g=>{g.translate(64,64);g.rotate(.6);const r=g.createRadialGradient(0,0,2,0,0,50);r.addColorStop(0,'#fff');r.addColorStop(1,'#ffc2da');g.fillStyle=r;g.beginPath();g.ellipse(0,0,50,28,0,0,PI*2);g.fill()});
@@ -246,6 +246,40 @@ function updBF(t){for(const b of BF){bp(b,t,v1);bp(b,t+.06,v2);const dx=v2.x-v1.
  b.g.position.copy(v1);b.g.rotation.set(-Math.atan2(dy,Math.hypot(dx,dz))*.8,Math.atan2(dx,dz),Math.sin(t*.8+b.p)*.35,'YXZ');
  const a=.2+.85*(.5+.5*Math.sin(t*b.fr+b.p));b.rp.rotation.z=a;b.lp.rotation.z=-a}}
 
+// Painted butterfly wings with flexible, per-wing flapping.
+function storyWingTexture(a,b,edge,dots,vein){return tex((g,n)=>{
+ const path=()=>{g.beginPath();g.moveTo(4,122);g.bezierCurveTo(50,70,130,8,246,14);g.bezierCurveTo(252,50,215,105,128,132);g.closePath();
+  g.moveTo(4,128);g.bezierCurveTo(70,124,160,138,196,184);g.bezierCurveTo(190,236,110,252,50,206);g.bezierCurveTo(20,180,6,160,4,128);g.closePath()};
+ g.save();path();g.clip();const fill=g.createRadialGradient(8,126,0,8,126,250);fill.addColorStop(0,a);fill.addColorStop(.6,b);fill.addColorStop(1,a);g.fillStyle=fill;g.fillRect(0,0,n,n);
+ g.strokeStyle=edge;g.lineCap='round';g.globalAlpha=vein;g.lineWidth=3;
+ for(const[x,y]of[[240,22],[220,50],[190,82],[150,112],[190,182],[150,224],[100,236],[60,205],[110,160]]){g.beginPath();g.moveTo(8,125);g.quadraticCurveTo(x*.5,y*.9+10,x,y);g.stroke()}
+ g.globalAlpha=1;const shade=g.createRadialGradient(4,126,0,4,126,70);shade.addColorStop(0,'rgba(20,10,10,.6)');shade.addColorStop(1,'rgba(20,10,10,0)');g.fillStyle=shade;g.fillRect(0,0,n,n);
+ g.lineWidth=18;g.strokeStyle=edge;g.stroke();
+ if(dots){g.fillStyle='rgba(255,255,255,.95)';for(const[x,y,s]of[[230,24,5],[234,44,4],[220,68,4],[198,92,3],[180,196,5],[160,222,4],[125,238,4],[90,236,3]]){g.beginPath();g.arc(x,y,s,0,PI*2);g.fill()}}
+ g.restore()},256)}
+const storyWingTextures=[
+ storyWingTexture('#ff7a12','#ffb347','#1b0f0a',true,.8),
+ storyWingTexture('#1c5bd8','#6fd0ff','#0d1a38',false,.3),
+ storyWingTexture('#ff6fa8','#ffd1e6','#4a1a3a',true,.35),
+ storyWingTexture('#ffc400','#fff3a0','#2a1c10',false,.6),
+];
+const storyWingGeometry=new T.PlaneGeometry(1,1,12,8).translate(.5,0,0).rotateX(PI/2);
+const storyBodyGeometry=new T.CylinderGeometry(.03,.015,.62,6).rotateX(PI/2).translate(0,0,-.03);
+const storyVertexShader='uniform float f,v;varying vec2 uv0;void main(){uv0=uv;vec3 p=position;float x=p.x,a=f-v*.45*x*x,c=cos(a),s=sin(a);p.x=x*c;p.y=x*s+v*.1*x*(.5-p.z)-.05*x*x;gl_Position=projectionMatrix*modelViewMatrix*vec4(p,1.);}';
+const storyFragmentShader='uniform sampler2D map;uniform float o;varying vec2 uv0;void main(){vec4 c=texture2D(map,uv0);if(c.a<.4)discard;gl_FragColor=vec4(c.rgb*(.82+.25*uv0.x),o);}';
+function makeStoryButterfly(species){const group=new T.Group(),inner=new T.Group();group.add(inner);
+ const uniforms={f:{value:.8},v:{value:0},o:{value:1},map:{value:storyWingTextures[species%storyWingTextures.length]}};
+ const wingMaterial=new T.ShaderMaterial({uniforms,vertexShader:storyVertexShader,fragmentShader:storyFragmentShader,side:T.DoubleSide,transparent:true,depthTest:false,depthWrite:false});
+ const leftWing=new T.Mesh(storyWingGeometry,wingMaterial),rightWing=new T.Mesh(storyWingGeometry,wingMaterial);rightWing.scale.x=-1;
+ const bodyMaterial=new T.MeshBasicMaterial({color:0x2a1a22,transparent:true,depthTest:false,depthWrite:false});
+ inner.add(leftWing,rightWing,new T.Mesh(storyBodyGeometry,bodyMaterial));
+ return{g:group,inn:inner,u:uniforms,bm:bodyMaterial}}
+function flapStoryButterfly(butterfly,t,activity,phase){const beat=t*(10+2.5*Math.sin(t*.3+phase))+phase*3;
+ const swing=Math.sin(beat)+.18*Math.sin(2*beat+.7),rest=.8+.1*Math.sin(t*1.7+phase);
+ butterfly.u.f.value=rest*(1-activity)+activity*(.5+.72*swing);
+ butterfly.u.v.value=activity*Math.cos(beat)*.9;
+ return beat}
+
 // bees
 const wingG=new T.CircleGeometry(.13,10).rotateX(PI/2).translate(.13,0,0),beeWm=new T.MeshBasicMaterial({color:0xffffff,transparent:true,opacity:.55,side:T.DoubleSide});
 const BE=[];
@@ -363,12 +397,15 @@ function panelTex(it,port){const W=port?700:1000,fs=port?46:40,c=document.create
  const tx=new T.CanvasTexture(c);tx.minFilter=T.LinearFilter;tx.generateMipmaps=false;return{tex:tx,ratio:Hh/W}}
 scene.add(cam);const pg=new T.Group();cam.add(pg);
 const pm=new T.Mesh(new T.PlaneGeometry(1,1),new T.MeshBasicMaterial({transparent:true,depthTest:false,depthWrite:false,fog:false}));pm.renderOrder=11;pg.add(pm);
-const wmP=wingMat(335);Object.assign(wmP,{transparent:true,depthTest:false,depthWrite:false,fog:false});
-const pwR=new T.Group(),pwL=new T.Group(),pw1=new T.Mesh(wGeo,wmP),pw2=new T.Mesh(wGeo,wmP);pw1.rotation.x=pw2.rotation.x=-PI/2;pw1.renderOrder=pw2.renderOrder=10;pwR.add(pw1);pwL.add(pw2);pg.add(pwR,pwL);
+const storyFlock=[],storyMatrix=new T.Matrix4(),storyAxisA=new T.Vector3(),storyAxisB=new T.Vector3(),storyAxisC=new T.Vector3();
+for(let i=0;i<10;i++){const butterfly=makeStoryButterfly(i),size=1.1+R()*.5;butterfly.g.scale.setScalar(size);pg.add(butterfly.g);
+ const order=i%3?12:9;butterfly.g.traverse(object=>{if(object.isMesh)object.renderOrder=order});
+ Object.assign(butterfly,{i,ph:R()*6,a:i/10*PI*2+.3,dl:i*.17+R()*.2,sy:(R()-.5)*8,h:0,pp:new T.Vector3(),init:true,size});storyFlock.push(butterfly)}
 let pi=0,ps='wait',pT=0,cur=null,curPort=false,hold=10;
-function layout(){const Hv=2*14*Math.tan(cam.fov*PI/360),Wv=Hv*cam.aspect,port=cam.aspect<1,pw=port?Wv*.7:Math.min(Wv*.5,12),ph2=pw*cur.ratio,ws=pw*(port?.36:.32);
- pm.scale.set(pw,ph2,1);pwR.position.set(pw*.5-.1,ph2*.08,-.05);pwL.position.set(-pw*.5+.1,ph2*.08,-.05);pw1.scale.setScalar(ws);pw2.scale.set(-ws,ws,ws)}
-function setPanel(i){pi=i;curPort=cam.aspect<1;if(cur)cur.tex.dispose();const it=PT[i];cur=panelTex(it,curPort);pm.material.map=cur.tex;pm.material.needsUpdate=true;hold=it.p?4+it.p.split(/\s+/).length*.32:5;layout()}
+let PW=1,PHh=1;
+function layout(){const Hv=2*14*Math.tan(cam.fov*PI/360),Wv=Hv*cam.aspect,port=cam.aspect<1;
+ PW=port?Wv*.78:Math.min(Wv*.5,12);PHh=PW*cur.ratio;pm.scale.set(PW,PHh,1)}
+function setPanel(i){pi=i;curPort=cam.aspect<1;if(cur)cur.tex.dispose();const it=PT[i];cur=panelTex(it,curPort);pm.material.map=cur.tex;pm.material.needsUpdate=true;hold=it.p?4+it.p.split(/\s+/).length*.32:5;layout();storyFlock.forEach(butterfly=>{butterfly.init=true})}
 function toOut(){ps='out';pT=0;if(pi===PT.length-1)su.classList.add('on')}
 function nextPanel(){if(ps==='hold')toOut();else if(ps==='in'||ps==='out')pT=Math.max(pT,2.6)}
 const controls=document.getElementById('b'),hint=document.getElementById('h'),countdown=document.getElementById('cd');
@@ -378,13 +415,34 @@ function advancePanel(){if(ps==='wait')startLetter();else nextPanel()}
 function skipStory(){clearTimeout(autoStartTimer);ps='done';pT=0;pg.visible=false;hint.style.display='none';controls.style.display='none';su.classList.add('on')}
 function updPanel(t,dt){if(ps==='wait'||ps==='done'){pg.visible=false;return}
  if((cam.aspect<1)!==curPort)setPanel(pi);
- pg.visible=true;pT+=dt;const D=14,Hv=2*D*Math.tan(cam.fov*PI/360),Wv=Hv*cam.aspect,side=pi%2?1:-1;
- let x=0,y=0,z=-D,sc=1,op=1,rate=4;
- if(ps==='in'){const u=Math.min(1,pT/3),e=1-Math.pow(1-u,3);x=-side*Wv*.75*(1-e)+Math.sin(e*PI*3)*1.3*(1-e);y=Hv*.4*(1-e)+Math.cos(e*PI*2)*.9*(1-e);z=-D-(1-e)*14;sc=.3+.7*e;op=Math.min(1,u*2.5);rate=10-5*e;if(u>=1){ps='hold';pT=0}}
- else if(ps==='hold'){x=Math.sin(t*.55)*.5;y=Math.sin(t*.9)*.35+Math.sin(t*1.7)*.1;rate=3.2;if(pT>hold)toOut()}
- else{const u=Math.min(1,pT/2.6),e=u*u;x=side*Wv*.8*e+Math.sin(u*PI*3)*1.2*u;y=Hv*.45*e+Math.cos(u*PI*2)*.8*u;z=-D-e*16;sc=1-.7*e;op=1-Math.min(1,u*1.3);rate=10;if(u>=1){if(pi<PT.length-1){setPanel(pi+1);ps='in';pT=0}else ps='done'}}
- pg.position.set(x,y,z);pg.scale.setScalar(sc);pg.rotation.z=Math.sin(t*1.3)*.05-(ps==='hold'?0:x*.01);
- pm.material.opacity=op;wmP.opacity=op*.8;const a=.15+.75*(.5+.5*Math.sin(t*rate));pwR.rotation.y=-a;pwL.rotation.y=a}
+ pg.visible=true;pT+=dt;const distance=14,Hv=2*distance*Math.tan(cam.fov*PI/360),Wv=Hv*cam.aspect,side=pi%2?1:-1;
+ let px=0,py=0,z=-distance,scale=1,opacity=1;
+ if(ps==='in'){const u=Math.min(1,pT/4.4),ease=1-Math.pow(1-u,3);px=-side*Wv*.75*(1-ease)+Math.sin(ease*PI*3)*1.3*(1-ease);py=Hv*.4*(1-ease)+Math.cos(ease*PI*2)*.9*(1-ease);z=-distance-(1-ease)*14;scale=.3+.7*ease;opacity=Math.min(1,u*2.5);if(u>=1){ps='hold';pT=0}}
+ else if(ps==='hold'){px=Math.sin(t*.55)*.5;py=Math.sin(t*.9)*.35+Math.sin(t*1.7)*.1;if(pT>hold)toOut()}
+ else{const u=Math.min(1,pT/2.6),ease=u*u;px=side*Wv*.8*ease+Math.sin(u*PI*3)*1.2*u;py=Hv*.45*ease+Math.cos(u*PI*2)*.8*u;z=-distance-ease*16;scale=1-.7*ease;opacity=1-Math.min(1,u*1.3);if(u>=1){if(pi<PT.length-1){setPanel(pi+1);ps='in';pT=0}else ps='done'}}
+ pg.position.set(0,0,z);pm.position.set(px,py,0);pm.scale.set(PW*scale,PHh*scale,1);pm.rotation.z=Math.sin(t*1.3)*.03;pm.material.opacity=opacity;
+ for(const butterfly of storyFlock){const cosine=Math.cos(butterfly.a),sine=Math.sin(butterfly.a);
+  const ax=Math.sign(cosine)*Math.pow(Math.abs(cosine),.55)*(PW*.5+.5),ay=Math.sign(sine)*Math.pow(Math.abs(sine),.55)*(PHh*.5+.4);
+  const hx=ax+Math.sin(t*.9+butterfly.ph)*.35,hy=ay+Math.cos(t*1.2+butterfly.ph)*.3;
+  let tx,ty,tz=0,activity=1,wingOpacity=1;
+  if(ps==='in'){const u=cl((pT-butterfly.dl)/2.4,0,1),ease=1-Math.pow(1-u,3),startX=-side*Wv*.75;
+   tx=startX+(hx+px-startX)*ease+Math.sin(ease*PI*2+butterfly.ph)*(1-ease)*1.4;
+   ty=butterfly.sy+(hy+py-butterfly.sy)*ease+Math.cos(ease*PI*3+butterfly.ph)*(1-ease)*1.1;
+   tz=Math.sin(ease*PI)*(butterfly.i%2?3:-3);activity=u<1?1:.5;wingOpacity=sm(0,.12,u)}
+  else if(ps==='hold'){tx=hx+px;ty=hy+py;activity=.3+.7*sm(-.2,.6,Math.sin(t*.45+butterfly.ph*3))}
+  else{const u=cl((pT-butterfly.dl*.6)/2.4,0,1),ease=u*u;
+   tx=hx+px+(side*Wv*.95-hx-px)*ease+Math.sin(u*PI*3+butterfly.ph)*u*1.2;
+   ty=hy+py+Hv*(butterfly.i%2?.35:-.15)*ease;tz=Math.sin(u*PI)*(butterfly.i%2?-3:3);wingOpacity=1-sm(.75,1,u)}
+  if(butterfly.init){butterfly.pp.set(tx,ty,tz);butterfly.init=false}
+  const dx=tx-butterfly.pp.x,dy=ty-butterfly.pp.y,speed=Math.hypot(dx,dy)/Math.max(dt,1e-3);butterfly.pp.set(tx,ty,tz);
+  if(speed>.8)butterfly.h+=angd(butterfly.h,Math.atan2(dy,dx))*(1-Math.exp(-dt*6));else butterfly.h+=dt*.5*Math.sin(t*.5+butterfly.ph);
+  const forwardX=Math.cos(butterfly.h),forwardY=Math.sin(butterfly.h);
+  storyMatrix.makeBasis(storyAxisA.set(-forwardY,forwardX,0),storyAxisB.set(0,0,1),storyAxisC.set(forwardX,forwardY,0));
+  butterfly.g.quaternion.setFromRotationMatrix(storyMatrix);butterfly.g.position.copy(butterfly.pp);
+  butterfly.g.scale.setScalar(butterfly.size*scale);butterfly.inn.rotation.x=-.4+Math.sin(t*.9+butterfly.ph)*.12;
+  const beat=flapStoryButterfly(butterfly,t,activity,butterfly.ph);butterfly.inn.position.y=-.08*Math.cos(beat)*activity;
+  butterfly.u.o.value=wingOpacity;butterfly.bm.opacity=wingOpacity;
+ }}
 
 document.getElementById('lb').onclick=advancePanel;document.getElementById('nx').onclick=skipStory;
 su.onclick=()=>{
@@ -425,5 +483,5 @@ ren.setAnimationLoop(()=>{const dt=Math.min(.05,clock.getDelta()),t=clock.elapse
  cam.position.set(F.x+Math.sin(yaw)*Math.cos(pit)*d,F.y+Math.sin(pit)*d,F.z+Math.cos(yaw)*Math.cos(pit)*d);
  cam.position.y=Math.max(cam.position.y,H(cam.position.x,cam.position.z)+1.2);cam.lookAt(F);
  ren.render(scene,cam);
- if(!started){started=true;const l=document.getElementById('ld');l.style.opacity=0;setTimeout(()=>l.remove(),1600);setTimeout(()=>document.getElementById('h').style.opacity=0,9000)}});
+ if(!started){started=true;const l=document.getElementById('ld');l.style.opacity=0;setTimeout(()=>l.remove(),600);setTimeout(()=>document.getElementById('h').style.opacity=0,9000);window.parent.postMessage({type:'heaven-garden:ready'},window.location.origin)}});
 </script></body></html>

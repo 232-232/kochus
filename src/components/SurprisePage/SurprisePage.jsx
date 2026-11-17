@@ -1,24 +1,27 @@
 import { useEffect, useRef } from 'react';
 
-export default function SurprisePage({ onNavigateToInvitation }) {
+export default function SurprisePage({ onReady, onNavigateToInvitation }) {
   const iframeRef = useRef(null);
 
   useEffect(() => {
     const handleMessage = (event) => {
       if (
         event.origin !== window.location.origin ||
-        event.source !== iframeRef.current?.contentWindow ||
-        event.data?.type !== 'heaven-garden:navigate-invitation'
+        event.source !== iframeRef.current?.contentWindow
       ) {
         return;
       }
 
-      onNavigateToInvitation();
+      if (event.data?.type === 'heaven-garden:ready') {
+        onReady?.();
+      } else if (event.data?.type === 'heaven-garden:navigate-invitation') {
+        onNavigateToInvitation();
+      }
     };
 
     window.addEventListener('message', handleMessage);
     return () => window.removeEventListener('message', handleMessage);
-  }, [onNavigateToInvitation]);
+  }, [onNavigateToInvitation, onReady]);
 
   return (
     <main className="relative z-10 h-screen w-screen overflow-hidden">

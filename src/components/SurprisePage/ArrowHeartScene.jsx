@@ -14,14 +14,21 @@ function createHeartShape() {
   return shape;
 }
 
-export default function ArrowHeartScene({ onComplete }) {
+export default function ArrowHeartScene({ onComplete, active = true, visible = active }) {
   const canvasRef = useRef(null);
   const veilRef = useRef(null);
   const completeRef = useRef(onComplete);
+  const activeRef = useRef(active);
+  const animationControlRef = useRef(() => {});
 
   useEffect(() => {
     completeRef.current = onComplete;
   }, [onComplete]);
+
+  useEffect(() => {
+    activeRef.current = active;
+    animationControlRef.current(true);
+  }, [active]);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -205,8 +212,9 @@ export default function ArrowHeartScene({ onComplete }) {
     let flightStart = new THREE.Vector3();
     let flightTarget = new THREE.Vector3();
     let startTime = performance.now();
-    const sceneStartTime = startTime;
+    let sceneStartTime = startTime;
     let completeFired = false;
+    let frameId = null;
 
     const layout = () => {
       const width = window.innerWidth;
@@ -303,7 +311,7 @@ export default function ArrowHeartScene({ onComplete }) {
     };
 
     const pointerDown = (event) => {
-      if (phase !== 'idle') return;
+      if (!activeRef.current || phase !== 'idle') return;
       pointerId = event.pointerId;
       pointerStart = { x: event.clientX, y: event.clientY };
       targetPull = 0;
@@ -330,9 +338,6 @@ export default function ArrowHeartScene({ onComplete }) {
         targetPull = 0;
       }
     };
-    const visibilityChange = () => {
-      startTime = performance.now();
-    };
     const resize = () => layout();
     canvas.addEventListener('pointerdown', pointerDown);
     canvas.addEventListener('pointermove', pointerMove);
@@ -340,15 +345,15 @@ export default function ArrowHeartScene({ onComplete }) {
     canvas.addEventListener('pointercancel', pointerUp);
     window.addEventListener('resize', resize);
     window.addEventListener('orientationchange', resize);
-    document.addEventListener('visibilitychange', visibilityChange);
     layout();
 
     const animate = (now) => {
+      frameId = null;
+      if (!activeRef.current || document.hidden) return;
       const delta = Math.min((now - startTime) / 1000, 0.05);
       startTime = now;
-      if (!document.hidden) {
-        const time = now / 1000;
-        if (phase === 'idle' || phase === 'draw') {
+      const time = now / 1000;
+      if (phase === 'idle' || phase === 'draw') {
           pull += (targetPull - pull) * Math.min(1, delta * 11);
           if (pull > 0.92) pull += Math.sin(time * 48) * 0.002;
           updateString();
@@ -376,7 +381,7 @@ export default function ArrowHeartScene({ onComplete }) {
             );
             orbiter.mesh.rotation.z = angle;
           });
-        } else if (phase === 'flying') {
+      } else if (phase === 'flying') {
           phaseTime += delta;
           const progress = Math.min(phaseTime / (reducedMotion ? 0.48 : 0.78), 1);
           arrowGroup.position.lerpVectors(flightStart, flightTarget, progress);
@@ -385,7 +390,7 @@ export default function ArrowHeartScene({ onComplete }) {
             phase = 'impact';
             phaseTime = 0;
           }
-        } else if (phase === 'impact') {
+      } else if (phase === 'impact') {
           phaseTime += delta;
           heartGroup.visible = true;
           const shake = reducedMotion ? 0.012 : 0.04;
@@ -398,7 +403,7 @@ export default function ArrowHeartScene({ onComplete }) {
             heartGroup.rotation.set(0, 0, 0);
             burst();
           }
-        } else if (phase === 'party' || phase === 'veil') {
+      } else if (phase === 'party' || phase === 'veil') {
           phaseTime += delta;
           const partyElapsed = phase === 'veil' ? phaseTime + (reducedMotion ? 0.4 : 1.2) : phaseTime;
           shardStates.forEach((shard, index) => {
@@ -442,13 +447,41 @@ export default function ArrowHeartScene({ onComplete }) {
             completeFired = true;
             completeRef.current?.();
           }
-        }
-        renderer.render(scene, camera);
       }
+      renderer.render(scene, camera);
       frameId = window.requestAnimationFrame(animate);
     };
 
-    let frameId = window.requestAnimationFrame(animate);
+    const startAnimation = (resetTime = false) => {
+      if (!activeRef.current || document.hidden || frameId !== null) return;
+      if (resetTime) {
+        startTime = performance.now();
+        sceneStartTime = startTime;
+      }
+      frameId = window.requestAnimationFrame(animate);
+    };
+    const stopAnimation = () => {
+      if (frameId !== null) {
+        window.cancelAnimationFrame(frameId);
+        frameId = null;
+      }
+    };
+    const visibilityChange = () => {
+      startTime = performance.now();
+      if (document.hidden) stopAnimation();
+      else startAnimation();
+    };
+
+    shards.visible = true;
+    partyHearts.visible = true;
+    renderer.compile(scene, camera);
+    shards.visible = false;
+    partyHearts.visible = false;
+    renderer.render(scene, camera);
+    animationControlRef.current = startAnimation;
+    if (activeRef.current) startAnimation(true);
+    document.addEventListener('visibilitychange', visibilityChange);
+
     const resources = new Set();
     scene.traverse((object) => {
       if (object.geometry) resources.add(object.geometry);
@@ -464,7 +497,8 @@ export default function ArrowHeartScene({ onComplete }) {
     });
 
     return () => {
-      window.cancelAnimationFrame(frameId);
+      stopAnimation();
+      animationControlRef.current = () => {};
       canvas.removeEventListener('pointerdown', pointerDown);
       canvas.removeEventListener('pointermove', pointerMove);
       canvas.removeEventListener('pointerup', pointerUp);
@@ -478,7 +512,7 @@ export default function ArrowHeartScene({ onComplete }) {
   }, []);
 
   return (
-    <main className="arrow-heart-scene">
+    <main className={`arrow-heart-scene${visible ? ' is-visible' : ''}${active ? ' is-active' : ''}`} aria-hidden={!visible}>
       <canvas ref={canvasRef} className="arrow-heart-canvas" aria-label="Drag back the arrow and release to break the heart" />
       <p className="arrow-heart-caption">someone made this, just for you</p>
       <p className="arrow-heart-hint">PULL &amp; LET GO</p>
