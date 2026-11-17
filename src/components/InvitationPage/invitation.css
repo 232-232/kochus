@@ -469,6 +469,74 @@
   color: #644957;
 }
 
+.birthday-gallery {
+  width: min(1120px, calc(100% - 3rem));
+  margin: 0 auto 8rem;
+  scroll-margin-top: 2rem;
+}
+
+.birthday-gallery-heading {
+  margin-bottom: 1.8rem;
+  text-align: center;
+}
+
+.birthday-gallery-heading p {
+  margin: 0;
+  color: #9a6d86;
+  font-size: 0.72rem;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+}
+
+.birthday-gallery-heading h2 {
+  margin: 0.35rem 0 0;
+  color: #8d4d6e;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(2rem, 5vw, 3.2rem);
+  font-weight: 500;
+}
+
+.birthday-gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: clamp(0.75rem, 2vw, 1.4rem);
+}
+
+.birthday-photo {
+  margin: 0;
+  padding: 0.7rem 0.7rem 1rem;
+  border: 1px solid rgba(255, 255, 255, 0.8);
+  border-radius: 0.8rem;
+  background: rgba(255, 250, 245, 0.84);
+  box-shadow: 0 14px 36px rgba(104, 57, 78, 0.12);
+  transform: rotate(var(--photo-tilt, 0deg));
+}
+
+.birthday-photo:nth-child(odd) {
+  --photo-tilt: -1.5deg;
+}
+
+.birthday-photo:nth-child(even) {
+  --photo-tilt: 1.5deg;
+}
+
+.birthday-photo img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  object-fit: contain;
+  background: #f7eee7;
+}
+
+.birthday-photo figcaption {
+  margin-top: 0.75rem;
+  color: #795568;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(0.9rem, 1.5vw, 1.1rem);
+  font-style: italic;
+  text-align: center;
+}
+
 .hero-scroll-btn {
   margin-top: 2.2rem;
   display: flex;
@@ -779,6 +847,8 @@
 }
 
 @media (max-width: 480px) {
+  .birthday-gallery-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .birthday-gallery { width: min(100% - 2rem, 32rem); margin-bottom: 5rem; }
   .invite-hero h1 { font-size: 4.2rem; }
   .story-title { font-size: 1.6rem; }
   .story-text { font-size: 0.95rem; }
