@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import LoveStoryStack from './LoveStoryStack';
 import birthdayCollage from '../../assets/birthday-collage.jpeg';
 import birthdayPortrait from '../../assets/birthday-portrait.png';
@@ -13,10 +13,30 @@ const BIRTHDAY_PHOTOS = [
   { src: birthdayMemories, alt: 'Scrapbook collage of us and our memories', caption: 'Always better together' },
 ];
 
-export default function InvitationPage({ onNavigateToReels, restoreScrollY }) {
+export default function InvitationPage({ onNavigateToGift, onProgress, restoreScrollY }) {
+  const [journeyComplete, setJourneyComplete] = useState(false);
+
   useEffect(() => {
     window.scrollTo(0, restoreScrollY);
   }, [restoreScrollY]);
+
+  useEffect(() => {
+    const updateJourneyProgress = () => {
+      const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
+      const progress = maxScroll <= 0 ? 100 : Math.min(1, window.scrollY / maxScroll);
+      const atEnd = maxScroll <= 0 || window.scrollY >= maxScroll - 24;
+      onProgress?.(Math.round(72 + progress * 28));
+      setJourneyComplete(atEnd);
+    };
+
+    updateJourneyProgress();
+    window.addEventListener('scroll', updateJourneyProgress, { passive: true });
+    window.addEventListener('resize', updateJourneyProgress);
+    return () => {
+      window.removeEventListener('scroll', updateJourneyProgress);
+      window.removeEventListener('resize', updateJourneyProgress);
+    };
+  }, [onProgress]);
 
   const handleScrollToStory = () => {
     document.querySelector('.birthday-gallery')?.scrollIntoView({
@@ -75,11 +95,16 @@ export default function InvitationPage({ onNavigateToReels, restoreScrollY }) {
           </p>
           <p className="letter-sign">With all my love,</p>
           <p className="letter-name">mubiyeyyy</p>
-          <button type="button" className="letter-reel-btn" onClick={onNavigateToReels}>
-            Reel
+          <button type="button" className="letter-gift-btn" onClick={onNavigateToGift}>
+            One More Gift
           </button>
         </div>
       </footer>
+      {journeyComplete && (
+        <div className="journey-complete" role="status">
+          <p>You made it through our whole journey. I hope it made you smile.</p>
+        </div>
+      )}
     </div>
   );
 }

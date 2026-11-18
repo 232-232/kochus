@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react';
 
-export default function SurprisePage({ onReady, onNavigateToInvitation }) {
+export default function SurprisePage({ onReady, onNavigateToInvitation, onProgress }) {
   const iframeRef = useRef(null);
 
   useEffect(() => {
@@ -16,12 +16,14 @@ export default function SurprisePage({ onReady, onNavigateToInvitation }) {
         onReady?.();
       } else if (event.data?.type === 'heaven-garden:navigate-invitation') {
         onNavigateToInvitation();
+      } else if (event.data?.type === 'heaven-garden:progress') {
+        onProgress?.(event.data.value);
       }
     };
 
     window.addEventListener('message', handleMessage);
     return () => window.removeEventListener('message', handleMessage);
-  }, [onNavigateToInvitation, onReady]);
+  }, [onNavigateToInvitation, onProgress, onReady]);
 
   return (
     <main className="relative z-10 h-screen w-screen overflow-hidden">

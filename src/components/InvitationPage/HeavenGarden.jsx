@@ -26,6 +26,16 @@ const BUTTERFLY_COLORS = [
   ['#2aa8ff', '#8be3ff'],
 ];
 
+const GARDEN_SPARKLES = [
+  { x: 120, y: 210, size: 2, phase: 0 },
+  { x: 330, y: 160, size: 1.5, phase: 1.2 },
+  { x: 510, y: 110, size: 2, phase: 2.4 },
+  { x: 960, y: 140, size: 1.8, phase: 0.8 },
+  { x: 1230, y: 250, size: 2.2, phase: 3.1 },
+  { x: 220, y: 570, size: 1.7, phase: 2 },
+  { x: 1140, y: 720, size: 2, phase: 4.2 },
+];
+
 const SWAY_REGIONS = [
   [0, 0, 800, 330, 5],
   [0, 560, 470, 562, 4],
@@ -36,12 +46,13 @@ const SWAY_REGIONS = [
 
 const STYLES = `
 .hg{position:fixed;inset:0;z-index:0;overflow:hidden;pointer-events:none;background:#1b1230}
-.hg-stage{position:absolute;inset:0;perspective:1200px;overflow:hidden}
-.hg-world{position:absolute;inset:-4%;transform-style:preserve-3d;transition:transform .15s ease-out}
+.hg-stage{position:absolute;inset:0;overflow:hidden}
+.hg-world{position:absolute;inset:-4%}
 .hg-canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
 .hg-header{position:fixed;top:0;left:0;right:0;padding:calc(env(safe-area-inset-top,0px) + 18px) 22px 0;color:#fff;text-shadow:0 2px 14px rgba(120,40,100,.7);pointer-events:none}
 .hg-header h1{margin:0;font:400 clamp(22px,4vw,44px)/1.2 Georgia,'Times New Roman',serif;letter-spacing:.04em}
 .hg-header p{margin:4px 0 0;font:italic clamp(12px,1.6vw,16px)/1.4 Georgia,'Times New Roman',serif;opacity:.9}
+@media(hover:hover) and (pointer:fine){.hg-stage{perspective:1200px}.hg-world{transform-style:preserve-3d;transition:transform .15s ease-out;will-change:transform}}
 @media(prefers-reduced-motion:reduce){.hg-world{transition:none}}
 `;
 
@@ -73,10 +84,12 @@ function HeavenGarden() {
     let pixelRatio = 1;
     let lastFrame = 0;
     let time = 0;
+    const isTouchDevice = window.matchMedia('(pointer: coarse)').matches;
+    const canMouseTilt = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
 
     const image = new Image();
     const resize = () => {
-      pixelRatio = Math.min(window.devicePixelRatio || 1, 2);
+      pixelRatio = Math.min(window.devicePixelRatio || 1, isTouchDevice ? 1.25 : 2);
       width = canvas.clientWidth;
       height = canvas.clientHeight;
       canvas.width = width * pixelRatio;
@@ -90,18 +103,11 @@ function HeavenGarden() {
       world.style.transform = `rotateY(${x * 4}deg) rotateX(${-y * 3}deg) translate3d(${-x * 14}px,${-y * 10}px,0)`;
     };
     const handlePointerMove = (event) => {
+      if (event.pointerType !== 'mouse') return;
       tilt((event.clientX / window.innerWidth) * 2 - 1, (event.clientY / window.innerHeight) * 2 - 1);
     };
-    const handleOrientation = (event) => {
-      if (event.gamma != null && event.beta != null) {
-        tilt(
-          Math.max(-1, Math.min(1, event.gamma / 30)),
-          Math.max(-1, Math.min(1, (event.beta - 45) / 30)),
-        );
-      }
-    };
 
-    const waterfallParticles = Array.from({ length: 520 }, () => {
+    const waterfallParticles = Array.from({ length: isTouchDevice ? 260 : 520 }, () => {
       const fall = FALLS[Math.floor(Math.random() * FALLS.length)];
       return {
         fall,
@@ -112,12 +118,12 @@ function HeavenGarden() {
         alpha: randomBetween(0.3, 0.8),
       };
     });
-    const mistParticles = Array.from({ length: 110 }, () => ({
+    const mistParticles = Array.from({ length: isTouchDevice ? 44 : 110 }, () => ({
       fall: Math.floor(Math.random() * FALLS.length),
       progress: Math.random(),
       position: randomBetween(0, 1),
     }));
-    const petals = Array.from({ length: 70 }, () => ({
+    const petals = Array.from({ length: isTouchDevice ? 38 : 70 }, () => ({
       x: randomBetween(0, WIDTH),
       y: randomBetween(0, HEIGHT),
       size: randomBetween(3, 7),
@@ -226,6 +232,10 @@ function HeavenGarden() {
 
     const renderFrame = (timestamp) => {
       if (disposed || !image.complete) return;
+      if (isTouchDevice && timestamp - lastFrame < 1000 / 30) {
+        frameId = window.requestAnimationFrame(renderFrame);
+        return;
+      }
       const delta = Math.min((timestamp - lastFrame) / 1000, 0.05);
       lastFrame = timestamp;
       time += delta;
@@ -242,20 +252,22 @@ function HeavenGarden() {
       context.setTransform(scale * pixelRatio, 0, 0, scale * pixelRatio, offsetX * pixelRatio, offsetY * pixelRatio);
       context.drawImage(image, 0, 0);
 
-      for (const region of SWAY_REGIONS) {
-        const [x, y, regionWidth, regionHeight, amplitude] = region;
-        context.save();
-        context.beginPath();
-        context.rect(x, y, regionWidth, regionHeight);
-        context.clip();
-        for (let stripY = y; stripY < y + regionHeight; stripY += 4) {
-          const edge = Math.min(1, (stripY - y) / 40, (y + regionHeight - stripY) / 40);
-          const wobble = Math.sin(time * 1.7 + stripY * 0.018 + x * 0.01)
-            + 0.5 * Math.sin(time * 3.1 + stripY * 0.05);
-          const shift = wobble * amplitude * wind * 0.35 * Math.max(0, edge);
-          context.drawImage(image, x, stripY, regionWidth, 4, x + shift, stripY, regionWidth, 4);
+      if (!isTouchDevice) {
+        for (const region of SWAY_REGIONS) {
+          const [x, y, regionWidth, regionHeight, amplitude] = region;
+          context.save();
+          context.beginPath();
+          context.rect(x, y, regionWidth, regionHeight);
+          context.clip();
+          for (let stripY = y; stripY < y + regionHeight; stripY += 4) {
+            const edge = Math.min(1, (stripY - y) / 40, (y + regionHeight - stripY) / 40);
+            const wobble = Math.sin(time * 1.7 + stripY * 0.018 + x * 0.01)
+              + 0.5 * Math.sin(time * 3.1 + stripY * 0.05);
+            const shift = wobble * amplitude * wind * 0.35 * Math.max(0, edge);
+            context.drawImage(image, x, stripY, regionWidth, 4, x + shift, stripY, regionWidth, 4);
+          }
+          context.restore();
         }
-        context.restore();
       }
 
       context.save();
@@ -301,6 +313,20 @@ function HeavenGarden() {
         context.beginPath();
         context.arc(lampX, lampY, 50, 0, Math.PI * 2);
         context.fill();
+      }
+
+      for (const sparkle of GARDEN_SPARKLES) {
+        const flicker = Math.max(0, Math.sin(time * 1.8 + sparkle.phase));
+        if (flicker < 0.78) continue;
+        const radius = sparkle.size * (0.8 + flicker * 0.4);
+        context.save();
+        context.globalAlpha = ((flicker - 0.78) / 0.22) * 0.75;
+        context.fillStyle = '#fff3c4';
+        context.shadowColor = '#ffd278';
+        context.shadowBlur = 7;
+        context.fillRect(sparkle.x - radius / 2, sparkle.y - radius * 2, radius, radius * 4);
+        context.fillRect(sparkle.x - radius * 2, sparkle.y - radius / 2, radius * 4, radius);
+        context.restore();
       }
 
       for (let index = 0; index < 26; index += 1) {
@@ -400,8 +426,7 @@ function HeavenGarden() {
     };
 
     window.addEventListener('resize', resize);
-    window.addEventListener('pointermove', handlePointerMove);
-    window.addEventListener('deviceorientation', handleOrientation);
+    if (canMouseTilt) window.addEventListener('pointermove', handlePointerMove);
     image.addEventListener('load', handleImageLoad);
     image.addEventListener('error', handleImageError);
     image.src = gardenBackground;
@@ -410,8 +435,7 @@ function HeavenGarden() {
       disposed = true;
       window.cancelAnimationFrame(frameId);
       window.removeEventListener('resize', resize);
-      window.removeEventListener('pointermove', handlePointerMove);
-      window.removeEventListener('deviceorientation', handleOrientation);
+      if (canMouseTilt) window.removeEventListener('pointermove', handlePointerMove);
       image.removeEventListener('load', handleImageLoad);
       image.removeEventListener('error', handleImageError);
     };
@@ -427,7 +451,7 @@ function HeavenGarden() {
       </div>
       <header className="hg-header">
         <h1>Eden Garden</h1>
-        <p>Move your mouse (or tilt your phone) to look around</p>
+        <p>A little garden, filled with love</p>
       </header>
     </div>
   );

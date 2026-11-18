@@ -11,7 +11,7 @@ body{height:100%;margin:0;overflow:hidden;background:var(--bg);font-family:Georg
 canvas{position:fixed;inset:0;width:100%;height:100%;touch-action:none;cursor:grab}
 #t{position:fixed;left:18px;top:calc(14px + env(safe-area-inset-top,0px));font-size:22px;letter-spacing:.02em;text-shadow:0 1px 8px rgba(255,255,255,.5);pointer-events:none}
 #h{position:fixed;left:0;right:0;bottom:calc(70px + env(safe-area-inset-bottom,0px));text-align:center;font-size:14px;pointer-events:none;transition:opacity 2s;text-shadow:0 1px 6px rgba(255,255,255,.6)}
-#b{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(18px + env(safe-area-inset-bottom,0px));display:flex;justify-content:center;gap:8px;white-space:nowrap}
+#b{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(54px + env(safe-area-inset-bottom,0px));display:flex;justify-content:center;gap:8px;white-space:nowrap}
 button{font:inherit;font-size:14px;color:var(--ink);background:var(--glass);border:1px solid rgba(255,255,255,.5);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);padding:10px 18px;border-radius:24px;cursor:pointer}
 button:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
 button:disabled{cursor:wait;opacity:.65}
@@ -32,14 +32,15 @@ button:disabled{cursor:wait;opacity:.65}
 @keyframes pulse{50%{transform:scale(1.04)}}
 #lx{position:absolute;right:10px;top:8px;width:36px;height:36px;padding:0;font-size:22px;line-height:1;border-radius:50%;z-index:2}
 #sp,#su{display:block;margin:10px auto 4px;padding:13px 26px;font-size:16px;font-weight:600;background:linear-gradient(135deg,#ff9ec0,#ffc98a);color:#4a2140;border:0;box-shadow:0 6px 20px rgba(255,140,170,.5);animation:pulse 2.4s ease-in-out infinite}
-#su{position:fixed;left:0;right:0;margin:0 auto;width:max-content;bottom:calc(84px + env(safe-area-inset-bottom,0px));opacity:0;pointer-events:none;transition:opacity 1s}
+#su{position:fixed;left:50%;top:50%;right:auto;bottom:auto;margin:0;width:max-content;max-width:calc(100vw - 32px);transform:translate(-50%,-50%);opacity:0;pointer-events:none;transition:opacity 1s;animation:centerPulse 2.4s ease-in-out infinite}
 #su.on{opacity:1;pointer-events:auto}
+@keyframes centerPulse{50%{transform:translate(-50%,-50%) scale(1.04)}}
 #fin{position:fixed;inset:0;display:grid;place-content:center;gap:14px;text-align:center;padding:24px;color:#5b3a5a;pointer-events:none;opacity:0;transition:opacity 1.6s;background:radial-gradient(ellipse at center,rgba(255,230,240,.4),rgba(255,230,240,0) 70%)}
 #fin.on{opacity:1;pointer-events:auto}
 #fin h2{font-size:clamp(30px,9vw,60px);margin:0;font-style:italic;text-shadow:0 2px 18px rgba(255,255,255,.9)}
 #fin p{max-width:30ch;margin:0 auto;font-size:clamp(15px,4vw,19px);line-height:1.6;text-shadow:0 1px 10px rgba(255,255,255,.9)}
 #fin button{justify-self:center;color:#5b3a5a}
-@media (max-width:520px){button{padding:8px 10px;font-size:12px}#b{left:8px;right:8px;transform:none;gap:6px}#ls{padding:22px 18px 18px}}
+@media (max-width:520px){button{padding:8px 10px;font-size:12px}#b{left:8px;right:8px;bottom:calc(48px + env(safe-area-inset-bottom,0px));transform:none;gap:6px}#ls{padding:22px 18px 18px}}
 #firework{position:fixed;inset:0;z-index:20;overflow:hidden;opacity:0;pointer-events:none;background:radial-gradient(circle at center,rgba(255,248,255,.12),rgba(22,12,34,.86));transition:opacity .55s}
 #firework.launch{opacity:1}
 #firework-rocket{position:absolute;left:50%;top:86%;width:7px;height:28px;border-radius:8px;background:linear-gradient(#fff,#ffd44d 45%,#ff6a8b);box-shadow:0 0 14px 5px rgba(255,190,90,.8);opacity:0;transform:translate(-50%,-50%)}
@@ -63,11 +64,16 @@ button:disabled{cursor:wait;opacity:.65}
 <div id="b"><button id="nx">Next</button><button id="hide-letter" aria-pressed="false">Hide letter</button><button id="tour">Tour</button><button id="skip">Skip</button></div>
 <div id="lt" class="card" role="dialog" aria-label="Birthday letter" aria-hidden="true"><button id="lx" aria-label="Close letter">×</button><div id="ls">
 <h1>My Dearest Kochussey ❤</h1><h2>Happy 23rd Birthday! ❤️🎂</h2>
-<p style="--i:0">Welcome to 23, my love! ❤️✨ It feels so special to celebrate another birthday of yours, especially when I think about how far we’ve come together. Our story started back in 2014, when we were just kids in 6th standard, with innocent smiles, little conversations, and no idea that one day you would become such an important part of my life. Who knew that a school-time connection would turn into something so beautiful? 🥹❤️</p>
-<p style="--i:1">From those school days to today, so many things have changed. We’ve grown up, made memories, experienced different moments, and watched life take us through so many chapters. But one thing that will always be special to me is that you have been part of my journey since those childhood days. I feel lucky to have known you then and to still have you in my life now. ❤️</p>
-<p style="--i:2">As you turn 23, I wish you all the happiness, success, and love in this world. I hope you achieve every dream you’ve ever wished for. I hope one day you get to wear that uniform you’ve always admired, make yourself proud, and look back at everything with a beautiful smile, knowing that all your hard work was worth it. I’ll always be cheering for you and believing in you. 🫶🏻</p>
-<p style="--i:3">No matter how old we grow or how many years pass, a part of me will always remember that little school-time story that began in 2014. Here’s to more memories, more laughter, more adventures, and many more birthdays together.</p>
-<p style="--i:4">Happy 23rd Birthday, my favourite person! ❤️ From our 6th standard days in 2014 to this beautiful chapter at 23, you will always be someone incredibly special to me. I love you! 🥹🫶🏻✨</p>
+<p style="--i:0">Welcome to 23, my love! ❤️✨ Our story began back in 2014, when we were just kids in 6th standard, with innocent smiles and little conversations. Who knew that a school-time connection would become something so special? 🥹❤️</p>
+
+<p style="--i:1">So much has changed since then. We've grown, made memories, and experienced so many chapters of life. But having you as part of my journey is something I'll always cherish. ❤️</p>
+
+<p style="--i:2">As you turn 23, I wish you endless happiness, success, and love. May all your dreams come true, especially your dream of wearing that uniform you've always admired. I'll always believe in you and cheer for you. 🫶🏻</p>
+
+<p style="--i:3">From those little school days in 2014 to the beautiful memories we make today, every chapter is special. Here's to more laughter, adventures, and birthdays together. ❤️</p>
+
+<p style="--i:4">Happy 23rd Birthday, my favourite person! No matter how much time passes, you'll always hold a special place in my heart. I love you! 🥹🫶🏻✨</p>
+ 
 <button id="sp">✦ One last surprise</button></div></div>
 <button id="su">✦ One last surprise</button>
 <div id="fin"><h2>Happy Birthday, Kochussey ❤️</h2><p>Here’s to more memories, more laughter and many more birthdays together. I love you! 🫶🏻</p><button id="fb">Back to the garden</button></div>
@@ -422,19 +428,19 @@ let PW=1,PHh=1;
 let pi=0,ps='wait',pT=0,cur=null,curPort=false,hold=10;
 function layout(){const Hv=2*14*Math.tan(cam.fov*PI/360),Wv=Hv*cam.aspect,port=cam.aspect<1;PW=port?Wv*.7:Math.min(Wv*.5,12);PHh=PW*cur.ratio;
  pm.scale.set(PW,PHh,1)}
-function setPanel(i){pi=i;curPort=cam.aspect<1;if(cur)cur.tex.dispose();const it=PT[i];cur=panelTex(it,curPort);pm.material.map=cur.tex;pm.material.needsUpdate=true;hold=it.p?4+it.p.split(/\s+/).length*.32:5;layout()}
-function toOut(){ps='out';pT=0;if(pi===PT.length-1)su.classList.add('on')}
+function setPanel(i){pi=i;curPort=cam.aspect<1;if(cur)cur.tex.dispose();const it=PT[i];cur=panelTex(it,curPort);pm.material.map=cur.tex;pm.material.needsUpdate=true;hold=it.p?4+it.p.split(/\s+/).length*.32:5;layout();window.parent.postMessage({type:"heaven-garden:progress",value:Math.round(20+(i/Math.max(1,PT.length-1))*45)},window.location.origin)}
+function toOut(){ps='out';pT=0;if(pi===PT.length-1){su.classList.add('on');window.parent.postMessage({type:'heaven-garden:progress',value:70},window.location.origin)}}
 const hideLetterButton=document.getElementById('hide-letter');
 let letterHidden=false,letterStartTimer;
 function setLetterHidden(hidden){
  letterHidden=hidden;hideLetterButton.textContent=hidden?'Show letter':'Hide letter';hideLetterButton.setAttribute('aria-pressed',String(hidden));
  card.setAttribute('aria-hidden',String(hidden));
- if(hidden){clearTimeout(letterStartTimer);su.classList.remove('on');if(ps==='wait')setPanel(0);if(ps!=='done'){ps='hide';pT=0}}
+ if(hidden){clearTimeout(letterStartTimer);if(ps==='wait')setPanel(0);if(ps!=='done'){su.classList.remove('on');ps='hide';pT=0}}
  else{setPanel(pi);ps='in';pT=0}
 }
 window.hideGardenLetter=()=>setLetterHidden(true);
 function nextPanel(){if(letterHidden)return;if(ps==='hold')toOut();else if(ps==='in')pT=Math.max(pT,2.6)}
-function skipPanel(){if(ps==='wait'){clearTimeout(letterStartTimer);setPanel(0);ps='in'}if(ps==='in'||ps==='hold'){toOut();pT=2.1}else if(ps==='out')pT=Math.max(pT,2.1)}
+function skipPanel(){clearTimeout(letterStartTimer);letterHidden=true;card.setAttribute('aria-hidden','true');hideLetterButton.textContent='Show letter';hideLetterButton.setAttribute('aria-pressed','true');su.classList.add('on');ps='done';pg.visible=false;window.parent.postMessage({type:'heaven-garden:progress',value:70},window.location.origin)}
 function startLetter(){if(letterHidden)return;card.setAttribute('aria-hidden','false');fin.classList.remove('on');su.classList.remove('on');document.getElementById('h').style.display='none';fyT=2.5;td=Math.min(td,40);setPanel(0);ps='in';pT=0}
 function updPanel(t,dt){if(ps==='wait'||ps==='done'){pg.visible=false;return}
  if((cam.aspect<1)!==curPort)setPanel(pi);
@@ -481,7 +487,7 @@ letterStartTimer=setTimeout(startLetter,6000);
 const clock=new T.Clock(),F=new T.Vector3();let started=false;
 window.beginGardenTour=shots=>{
  if(tour)return;
-tour={shots,index:0,startedAt:performance.now(),duration:2.6,moveDuration:1.8,fromPosition:cam.position.clone(),fromTarget:F.clone()};
+tour={shots,index:0,startedAt:performance.now(),duration:1.8,moveDuration:1.8,fromPosition:cam.position.clone(),fromTarget:F.clone()};
  skyViewTarget=null;
  document.getElementById('tour').disabled=true;
  document.getElementById('h').style.opacity=0;
@@ -495,7 +501,7 @@ ren.setAnimationLoop(()=>{const dt=Math.min(.05,clock.getDelta()),t=clock.elapse
   if(petals[j+1]<H(petals[j],petals[j+2])+.1){petals[j+1]=22+R()*8;petals[j]=(R()-.5)*150;petals[j+2]=(R()-.5)*150}if(petals[j]>75)petals[j]-=150}
  for(let i=0;i<350;i++){const j=i*3;motes[j]+=Math.sin(t*.3+i)*.25*dt;motes[j+1]+=(.2+Math.sin(t*.5+i*2)*.15)*dt;motes[j+2]+=Math.cos(t*.25+i)*.25*dt;if(motes[j+1]>16)motes[j+1]=.5}
  scene.children.filter(o=>o.isPoints).forEach(p=>p.geometry.attributes.position.needsUpdate=true);
- if(performance.now()-last>5000&&!drag)ty+=dt*.035;
+
  const k=1-Math.exp(-dt*6);yaw+=(ty-yaw)*k;pit+=(tp-pit)*k;dist+=(td-dist)*k;
  fy+=(fyT-fy)*Math.min(1,dt*1.2);F.set(Math.sin(t*.05)*6,fy,Math.cos(t*.04)*6);if(skyViewTarget)F.copy(skyViewTarget);const d=dist+Math.sin(t*.2)*.8;
  cam.position.set(F.x+Math.sin(yaw)*Math.cos(pit)*d,F.y+Math.sin(pit)*d,F.z+Math.cos(yaw)*Math.cos(pit)*d);
@@ -675,6 +681,7 @@ function startTour(){
   const front=new T.Vector3(0,0,1).transformDirection(board.g.matrixWorld);
   return{position:target.clone().addScaledVector(front,24).add(new T.Vector3(0,2,0)),target}
  });
+ pics.forEach(pic=>{pic.g.updateMatrixWorld(true);const target=pic.g.getWorldPosition(new T.Vector3());const front=new T.Vector3(0,0,1).applyQuaternion(pic.g.getWorldQuaternion(new T.Quaternion())).normalize();shots.push({position:target.clone().addScaledVector(front,20).add(new T.Vector3(0,2,0)),target})});
  shots.push({position:new T.Vector3(0,75,38),target:new T.Vector3(0,40,-80)});
  window.beginGardenTour(shots);
 }

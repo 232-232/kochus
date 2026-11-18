@@ -1,4 +1,4 @@
-import { memo, useRef } from 'react';
+import { memo, useEffect, useRef, useState } from 'react';
 import {
   motion,
   useReducedMotion,
@@ -9,7 +9,40 @@ import { STORIES } from './storyData';
 
 const STICKY_TOP = 96;
 
-const StoryCard = memo(function StoryCard({ story, index, total }) {
+function StoryCardContent({ story, index }) {
+  return (
+    <div className="story-layout">
+      <div className="story-copy">
+        <p className="story-kicker">
+          <span>{story.season}</span>
+          <span className="story-dot" />
+          <span>Chapter {String(index + 1).padStart(2, '0')}</span>
+        </p>
+        <h2 className="story-year">{story.year}</h2>
+        <h3 className="story-title">{story.title}</h3>
+        <p className="story-text">{story.text}</p>
+      </div>
+
+      <figure className="story-media">
+        <div className="photo-glow" />
+        <img
+          src={story.image}
+          alt={`${story.year} — ${story.title}`}
+          loading={index === 0 ? 'eager' : 'lazy'}
+          decoding="async"
+          onError={(event) => {
+            if (!story.fallback || event.currentTarget.dataset.fallback === '1') return;
+            event.currentTarget.dataset.fallback = '1';
+            event.currentTarget.src = story.fallback;
+          }}
+        />
+        <figcaption>{story.season} · {story.year}</figcaption>
+      </figure>
+    </div>
+  );
+}
+
+const AnimatedStoryCard = memo(function AnimatedStoryCard({ story, index, total }) {
   const sectionRef = useRef(null);
   const reduceMotion = useReducedMotion();
 
@@ -61,53 +94,44 @@ const StoryCard = memo(function StoryCard({ story, index, total }) {
       }}
     >
       <motion.article className="story-card" style={style}>
-        <div className="story-layout">
-          <div className="story-copy">
-            <p className="story-kicker">
-              <span>{story.season}</span>
-              <span className="story-dot" />
-              <span>Chapter {String(index + 1).padStart(2, '0')}</span>
-            </p>
-            <h2 className="story-year">{story.year}</h2>
-            <h3 className="story-title">{story.title}</h3>
-            <p className="story-text">{story.text}</p>
-          </div>
-
-          <figure className="story-media">
-            <div className="photo-glow" />
-            <img
-              src={story.image}
-              alt={`${story.year} — ${story.title}`}
-              loading={index === 0 ? 'eager' : 'lazy'}
-              decoding="async"
-              onError={(event) => {
-                if (
-                  !story.fallback ||
-                  event.currentTarget.dataset.fallback === '1'
-                )
-                  return;
-                event.currentTarget.dataset.fallback = '1';
-                event.currentTarget.src = story.fallback;
-              }}
-            />
-            <figcaption>
-              {story.season} · {story.year}
-            </figcaption>
-          </figure>
-        </div>
+        <StoryCardContent story={story} index={index} />
       </motion.article>
     </section>
   );
 });
 
+const StaticStoryCard = memo(function StaticStoryCard({ story, index }) {
+  return (
+    <section className="story-scene" aria-label={`Chapter ${index + 1}: ${story.year}`}>
+      <article className="story-card">
+        <StoryCardContent story={story} index={index} />
+      </article>
+    </section>
+  );
+});
+
 export default function LoveStoryStack() {
+  const [isTouchDevice, setIsTouchDevice] = useState(() => (
+    window.matchMedia('(hover: none) and (pointer: coarse)').matches
+  ));
+  const reduceMotion = useReducedMotion();
+
+  useEffect(() => {
+    const touchQuery = window.matchMedia('(hover: none) and (pointer: coarse)');
+    const updateTouchLayout = (event) => setIsTouchDevice(event.matches);
+    touchQuery.addEventListener('change', updateTouchLayout);
+    return () => touchQuery.removeEventListener('change', updateTouchLayout);
+  }, []);
+
+  const Card = isTouchDevice || reduceMotion ? StaticStoryCard : AnimatedStoryCard;
+
   return (
     <section
       className="story-track"
       aria-label="Our story through the years"
     >
       {STORIES.map((story, index) => (
-        <StoryCard
+        <Card
           key={`${story.year}-${story.title}`}
           story={story}
           index={index}

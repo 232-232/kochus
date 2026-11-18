@@ -1,9 +1,3 @@
-import photo1 from "../../assets/photo1.jpeg";
-import photo2 from "../../assets/photo5.PNG";
-import photo3 from "../../assets/photo2.PNG";
-import photo4 from "../../assets/photo3.PNG";
-import photo5 from "../../assets/photo4.PNG";
-import photo6 from "../../assets/photo6.PNG";
 import photo7 from "../../assets/photo7.jpeg";
 import photo8 from "../../assets/photo8.jpeg";
 import photo9 from "../../assets/photo9.jpeg";
@@ -15,12 +9,6 @@ import photo14 from "../../assets/photo14.jpeg";
 import photo15 from "../../assets/photo15.jpeg";
 import photo16 from "../../assets/photo16.jpeg";
 import couple from '../../assets/couple.PNG';
-
-
-import video1 from "../../assets/IMG_2205.MOV";
-import video2 from "../../assets/IMG_2245.MOV";
-import video3 from "../../assets/IMG_2247.MOV";
-import video4 from "../../assets/IMG_2248.MP4";
 
 
 export const STORIES = [
@@ -124,5 +112,3 @@ export const STORIES = [
     demo: false,
   },
 ];
-
-export const REELS = [video1, video2, video3, video4];

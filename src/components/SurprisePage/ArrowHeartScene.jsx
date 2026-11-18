@@ -35,8 +35,10 @@ export default function ArrowHeartScene({ onComplete, active = true, visible = a
     if (!canvas) return undefined;
 
     const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const isTouchDevice = window.matchMedia('(hover: none) and (pointer: coarse)').matches;
+    const pixelRatioCap = isTouchDevice ? 1.35 : 2;
     const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, pixelRatioCap));
     renderer.setClearColor(0x000000, 0);
     renderer.outputColorSpace = THREE.SRGBColorSpace;
 
@@ -167,20 +169,20 @@ export default function ArrowHeartScene({ onComplete, active = true, visible = a
     arrowGroup.add(shaft, arrowHead);
     bowGroup.add(arrowGroup);
 
-    const shardCount = reducedMotion ? 110 : 220;
+    const shardCount = reducedMotion || isTouchDevice ? 110 : 220;
     const shardGeometry = new THREE.TetrahedronGeometry(0.11, 0);
     const shardMaterial = new THREE.MeshBasicMaterial({ transparent: true, opacity: 1 });
     const shards = new THREE.InstancedMesh(shardGeometry, shardMaterial, shardCount);
     shards.visible = false;
     scene.add(shards);
 
-    const partyCount = reducedMotion ? 60 : 150;
+    const partyCount = reducedMotion || isTouchDevice ? 60 : 150;
     const partyMaterial = new THREE.MeshBasicMaterial({ transparent: true, opacity: 0.94 });
     const partyHearts = new THREE.InstancedMesh(heartGeometry, partyMaterial, partyCount);
     partyHearts.visible = false;
     scene.add(partyHearts);
 
-    const sparkCount = reducedMotion ? 160 : 420;
+    const sparkCount = reducedMotion || isTouchDevice ? 160 : 420;
     const sparkPositions = new Float32Array(sparkCount * 3);
     const sparkVelocities = [];
     for (let i = 0; i < sparkCount; i += 1) {
@@ -220,7 +222,7 @@ export default function ArrowHeartScene({ onComplete, active = true, visible = a
       const width = window.innerWidth;
       const height = window.innerHeight;
       const aspect = width / height;
-      renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, pixelRatioCap));
       renderer.setSize(width, height, false);
       camera.left = -5 * aspect;
       camera.right = 5 * aspect;
