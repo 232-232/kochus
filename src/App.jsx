@@ -5,13 +5,15 @@ import ArrowHeartScene from './components/SurprisePage/ArrowHeartScene';
 import SurprisePage from './components/SurprisePage/SurprisePage';
 import HeavenGarden from './components/InvitationPage/HeavenGarden';
 import InvitationPage from './components/InvitationPage/InvitationPage';
+import ReelPage from './components/InvitationPage/ReelPage';
 import backgroundMusic from './assets/bg.m4a';
 import './App.css';
 
 export default function App() {
-  const [page, setPage] = useState('lock'); // 'lock' | 'heart' | 'surprise' | 'invitation'
+  const [page, setPage] = useState('lock'); // 'lock' | 'heart' | 'surprise' | 'invitation' | 'reels'
   const [heartCurtainVisible, setHeartCurtainVisible] = useState(false);
   const [heartSceneMounted, setHeartSceneMounted] = useState(true);
+  const [invitationScrollY, setInvitationScrollY] = useState(0);
   const audioRef = useRef(null);
   const heartSceneRetireTimerRef = useRef(null);
 
@@ -31,6 +33,11 @@ export default function App() {
 
   const handleHeartComplete = useCallback(() => setPage('surprise'), []);
   const handleNavigateToInvitation = useCallback(() => setPage('invitation'), []);
+  const handleNavigateToReels = useCallback(() => {
+    setInvitationScrollY(window.scrollY);
+    setPage('reels');
+  }, []);
+  const handleReturnToInvitation = useCallback(() => setPage('invitation'), []);
 
   const handleGardenReady = useCallback(() => {
     setHeartCurtainVisible(false);
@@ -88,7 +95,17 @@ export default function App() {
           )}
 
           {page === 'invitation' && (
-            <InvitationPage onReelPlaybackChange={handleReelPlaybackChange} />
+            <InvitationPage
+              onNavigateToReels={handleNavigateToReels}
+              restoreScrollY={invitationScrollY}
+            />
+          )}
+
+          {page === 'reels' && (
+            <ReelPage
+              onBack={handleReturnToInvitation}
+              onPlaybackChange={handleReelPlaybackChange}
+            />
           )}
         </motion.div>
       </AnimatePresence>

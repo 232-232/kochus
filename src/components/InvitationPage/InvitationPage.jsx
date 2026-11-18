@@ -1,7 +1,5 @@
-import { useEffect, useRef } from 'react';
+import { useEffect } from 'react';
 import LoveStoryStack from './LoveStoryStack';
-import ReelVideo from './ReelVideo';
-import { REELS } from './storyData';
 import birthdayCollage from '../../assets/birthday-collage.jpeg';
 import birthdayPortrait from '../../assets/birthday-portrait.png';
 import birthdayPink from '../../assets/birthday-pink.png';
@@ -15,10 +13,10 @@ const BIRTHDAY_PHOTOS = [
   { src: birthdayMemories, alt: 'Scrapbook collage of us and our memories', caption: 'Always better together' },
 ];
 
-export default function InvitationPage({ onReelPlaybackChange }) {
-  const activeVideoRef = useRef(null);
-
-  useEffect(() => () => onReelPlaybackChange?.(false), [onReelPlaybackChange]);
+export default function InvitationPage({ onNavigateToReels, restoreScrollY }) {
+  useEffect(() => {
+    window.scrollTo(0, restoreScrollY);
+  }, [restoreScrollY]);
 
   const handleScrollToStory = () => {
     document.querySelector('.birthday-gallery')?.scrollIntoView({
@@ -64,19 +62,6 @@ export default function InvitationPage({ onReelPlaybackChange }) {
 
       <LoveStoryStack />
 
-      <section className="reel-section">
-        <p className="reel-label">A gift for you · Our moments</p>
-        {REELS.map((videoSrc, index) => (
-          <ReelVideo
-            key={videoSrc}
-            videoSrc={videoSrc}
-            activeVideoRef={activeVideoRef}
-            onPlaybackChange={onReelPlaybackChange}
-            isLast={index === REELS.length - 1}
-          />
-        ))}
-      </section>
-
       <footer className="invite-letter">
         <p className="letter-kicker">A wish from my heart</p>
         <div className="letter-card">
@@ -90,6 +75,9 @@ export default function InvitationPage({ onReelPlaybackChange }) {
           </p>
           <p className="letter-sign">With all my love,</p>
           <p className="letter-name">mubiyeyyy</p>
+          <button type="button" className="letter-reel-btn" onClick={onNavigateToReels}>
+            Reel
+          </button>
         </div>
       </footer>
     </div>
