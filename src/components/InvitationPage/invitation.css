@@ -920,17 +920,6 @@
   .letter-card { padding: 1.6rem 1.2rem; }
 }
 
-@media (hover: none) and (pointer: coarse) {
-  .story-track {
-    padding-bottom: 0;
-  }
-
-  .story-scene {
-    min-height: auto;
-    padding-block: 1.25rem;
-  }
-}
-
 @media (prefers-reduced-motion: reduce) {
   .mouse-wheel::after {
     animation: none !important;

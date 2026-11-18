@@ -1,4 +1,4 @@
-import { memo, useEffect, useRef, useState } from 'react';
+import { memo, useRef } from 'react';
 import {
   motion,
   useReducedMotion,
@@ -100,38 +100,14 @@ const AnimatedStoryCard = memo(function AnimatedStoryCard({ story, index, total 
   );
 });
 
-const StaticStoryCard = memo(function StaticStoryCard({ story, index }) {
-  return (
-    <section className="story-scene" aria-label={`Chapter ${index + 1}: ${story.year}`}>
-      <article className="story-card">
-        <StoryCardContent story={story} index={index} />
-      </article>
-    </section>
-  );
-});
-
 export default function LoveStoryStack() {
-  const [isTouchDevice, setIsTouchDevice] = useState(() => (
-    window.matchMedia('(hover: none) and (pointer: coarse)').matches
-  ));
-  const reduceMotion = useReducedMotion();
-
-  useEffect(() => {
-    const touchQuery = window.matchMedia('(hover: none) and (pointer: coarse)');
-    const updateTouchLayout = (event) => setIsTouchDevice(event.matches);
-    touchQuery.addEventListener('change', updateTouchLayout);
-    return () => touchQuery.removeEventListener('change', updateTouchLayout);
-  }, []);
-
-  const Card = isTouchDevice || reduceMotion ? StaticStoryCard : AnimatedStoryCard;
-
   return (
     <section
       className="story-track"
       aria-label="Our story through the years"
     >
       {STORIES.map((story, index) => (
-        <Card
+        <AnimatedStoryCard
           key={`${story.year}-${story.title}`}
           story={story}
           index={index}
