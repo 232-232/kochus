@@ -50,7 +50,7 @@ const STYLES = `
 .hg-world{position:absolute;inset:-4%}
 .hg-canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
 .hg-header{position:fixed;top:0;left:0;right:0;padding:calc(env(safe-area-inset-top,0px) + 18px) 22px 0;color:#fff;text-shadow:0 2px 14px rgba(120,40,100,.7);pointer-events:none}
-.hg-header h1{margin:0;font:400 clamp(22px,4vw,44px)/1.2 Georgia,'Times New Roman',serif;letter-spacing:.04em}
+.hg-header h1{margin:0;font:400 clamp(22px,4vw,44px)/1.2 'Great Vibes',cursive;letter-spacing:.04em}
 .hg-header p{margin:4px 0 0;font:italic clamp(12px,1.6vw,16px)/1.4 Georgia,'Times New Roman',serif;opacity:.9}
 @media(hover:hover) and (pointer:fine){.hg-stage{perspective:1200px}.hg-world{transform-style:preserve-3d;transition:transform .15s ease-out;will-change:transform}}
 @media(prefers-reduced-motion:reduce){.hg-world{transition:none}}

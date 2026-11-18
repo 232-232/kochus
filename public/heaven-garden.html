@@ -1,18 +1,21 @@
 <!DOCTYPE html>
 <html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;500;600;700&family=Great+Vibes&family=Playfair+Display:wght@400;500;600;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <title>Heaven Garden</title>
 <style>
 :root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);--ink:#5b3a5a;--glass:rgba(255,248,240,.62);--bg:#fbe9d6}
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--ink:#fff3e6;--glass:rgba(50,35,70,.55);--bg:#2a2140}}
 :root[data-theme="dark"]{--ink:#fff3e6;--glass:rgba(50,35,70,.55);--bg:#2a2140}
 html{scroll-padding-top:env(safe-area-inset-top,0px);height:100%}
-body{height:100%;margin:0;overflow:hidden;background:var(--bg);font-family:Georgia,'Palatino Linotype',serif;color:var(--ink)}
+body{height:100%;margin:0;overflow:hidden;background:var(--bg);font-family:'Poppins',sans-serif;color:var(--ink)}
 canvas{position:fixed;inset:0;width:100%;height:100%;touch-action:none;cursor:grab}
-#t{position:fixed;left:18px;top:calc(14px + env(safe-area-inset-top,0px));font-size:22px;letter-spacing:.02em;text-shadow:0 1px 8px rgba(255,255,255,.5);pointer-events:none}
+#t{position:fixed;left:18px;top:calc(14px + env(safe-area-inset-top,0px));font:400 clamp(28px,5vw,42px)/1.1 'Great Vibes',cursive;letter-spacing:.02em;text-shadow:0 1px 8px rgba(255,255,255,.5);pointer-events:none}
 #h{position:fixed;left:0;right:0;bottom:calc(70px + env(safe-area-inset-bottom,0px));text-align:center;font-size:14px;pointer-events:none;transition:opacity 2s;text-shadow:0 1px 6px rgba(255,255,255,.6)}
 #b{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(54px + env(safe-area-inset-bottom,0px));display:flex;justify-content:center;gap:8px;white-space:nowrap}
-button{font:inherit;font-size:14px;color:var(--ink);background:var(--glass);border:1px solid rgba(255,255,255,.5);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);padding:10px 18px;border-radius:24px;cursor:pointer}
+button{font:500 14px 'Poppins',sans-serif;color:var(--ink);background:var(--glass);border:1px solid rgba(255,255,255,.5);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);padding:10px 18px;border-radius:24px;cursor:pointer}
 button:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
 button:disabled{cursor:wait;opacity:.65}
 #ld{position:fixed;inset:0;display:grid;place-items:center;background:var(--bg);font-size:18px;transition:opacity 1.5s}
@@ -24,9 +27,9 @@ button:disabled{cursor:wait;opacity:.65}
 .card,.card.on{position:absolute;left:auto;right:auto;bottom:auto;margin:-1px;width:1px;height:1px;max-height:1px;overflow:hidden;clip-path:inset(50%);backdrop-filter:none;-webkit-backdrop-filter:none;box-shadow:none;border:0;pointer-events:none;opacity:0}
 #lt #sp{display:none}
 #ls{overflow-y:auto;padding:26px 24px 22px;-webkit-overflow-scrolling:touch;overscroll-behavior:contain}
-#ls h1{font-size:clamp(24px,6vw,32px);margin:0 0 4px;padding-right:30px;font-style:italic;font-weight:600;line-height:1.15}
-#ls h2{font-size:clamp(16px,4.2vw,19px);margin:0 0 16px;font-weight:400}
-#ls p{font-size:clamp(15px,3.9vw,17px);line-height:1.7;margin:0 0 14px}
+#ls h1{font:400 clamp(28px,7vw,40px)/1.15 'Great Vibes',cursive;margin:0 0 4px;padding-right:30px}
+#ls h2{font:500 clamp(16px,4.2vw,19px)/1.4 'Playfair Display',serif;margin:0 0 16px}
+#ls p{font:300 clamp(15px,3.9vw,17px)/1.7 'Poppins',sans-serif;margin:0 0 14px}
 .card.on p{animation:up 1s both;animation-delay:calc(var(--i)*.35s + .4s)}
 @keyframes up{from{opacity:0;transform:translateY(10px)}}
 @keyframes pulse{50%{transform:scale(1.04)}}
@@ -37,8 +40,9 @@ button:disabled{cursor:wait;opacity:.65}
 @keyframes centerPulse{50%{transform:translate(-50%,-50%) scale(1.04)}}
 #fin{position:fixed;inset:0;display:grid;place-content:center;gap:14px;text-align:center;padding:24px;color:#5b3a5a;pointer-events:none;opacity:0;transition:opacity 1.6s;background:radial-gradient(ellipse at center,rgba(255,230,240,.4),rgba(255,230,240,0) 70%)}
 #fin.on{opacity:1;pointer-events:auto}
-#fin h2{font-size:clamp(30px,9vw,60px);margin:0;font-style:italic;text-shadow:0 2px 18px rgba(255,255,255,.9)}
-#fin p{max-width:30ch;margin:0 auto;font-size:clamp(15px,4vw,19px);line-height:1.6;text-shadow:0 1px 10px rgba(255,255,255,.9)}
+#fin h2{font:500 clamp(30px,9vw,60px)/1.2 'Playfair Display',serif;margin:0;text-shadow:0 2px 18px rgba(255,255,255,.9)}
+#fin p{max-width:30ch;margin:0 auto;font:400 clamp(15px,4vw,19px)/1.6 'Poppins',sans-serif;text-shadow:0 1px 10px rgba(255,255,255,.9)}
+#fin .fin-signature{display:block;margin-top:.35em;font:600 1.4em/1.2 'Dancing Script',cursive}
 #fin button{justify-self:center;color:#5b3a5a}
 @media (max-width:520px){button{padding:8px 10px;font-size:12px}#b{left:8px;right:8px;bottom:calc(48px + env(safe-area-inset-bottom,0px));transform:none;gap:6px}#ls{padding:22px 18px 18px}}
 #firework{position:fixed;inset:0;z-index:20;overflow:hidden;opacity:0;pointer-events:none;background:radial-gradient(circle at center,rgba(255,248,255,.12),rgba(22,12,34,.86));transition:opacity .55s}
@@ -76,7 +80,7 @@ button:disabled{cursor:wait;opacity:.65}
  
 <button id="sp">✦ One last surprise</button></div></div>
 <button id="su">✦ One last surprise</button>
-<div id="fin"><h2>Happy Birthday, Kochussey ❤️</h2><p>Here’s to more memories, more laughter and many more birthdays together. I love you! 🫶🏻</p><button id="fb">Back to the garden</button></div>
+<div id="fin"><h2>Happy Birthday, Kochussey ❤️</h2><p>Here’s to more memories, more laughter and many more birthdays together. <span class="fin-signature">I love you! 🫶🏻</span></p><button id="fb">Back to the garden</button></div>
 <div id="firework" aria-hidden="true"><span id="firework-rocket"></span><span id="firework-flash"></span><span id="firework-ring"></span><div id="firework-sparks"></div></div>
 <div id="ld">Opening the garden…</div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
@@ -348,7 +352,7 @@ addEventListener('resize',size);size();
 
 // birthday
 const heartTex=tex(g=>{g.fillStyle='#fff';g.beginPath();g.moveTo(64,112);g.bezierCurveTo(8,70,14,16,64,44);g.bezierCurveTo(114,16,120,70,64,112);g.fill()});
-const sign=(()=>{const c=document.createElement('canvas');c.width=1024;c.height=256;const g=c.getContext('2d');g.textAlign='center';g.shadowColor='rgba(255,140,185,.95)';g.shadowBlur=26;g.fillStyle='#fff';g.font='italic 700 84px Georgia,serif';g.fillText('Happy 23rd Birthday',512,98);g.fillStyle='#ffe3ee';g.font='italic 700 100px Georgia,serif';g.fillText('Kochussey ❤',512,210);
+const sign=(()=>{const c=document.createElement('canvas');c.width=1024;c.height=256;const g=c.getContext('2d');g.textAlign='center';g.shadowColor='rgba(255,140,185,.95)';g.shadowBlur=26;g.fillStyle='#fff';g.font='500 84px "Playfair Display",serif';g.fillText('Happy 23rd Birthday',512,98);g.fillStyle='#ffe3ee';g.font='400 100px "Great Vibes",cursive';g.fillText('Kochussey ❤',512,210);
  const s=new T.Sprite(new T.SpriteMaterial({map:new T.CanvasTexture(c),transparent:true,depthWrite:false,fog:false}));scene.add(s);return s})();
 const hs=new T.Shape();hs.moveTo(0,-1);hs.bezierCurveTo(-1.6,-.1,-1,1.2,0,.6);hs.bezierCurveTo(1,1.2,1.6,-.1,0,-1);
 const hg=new T.ExtrudeGeometry(hs,{depth:.35,bevelEnabled:true,bevelSize:.12,bevelThickness:.12,bevelSegments:3,curveSegments:16});hg.center();
@@ -377,7 +381,7 @@ const su=document.getElementById('su'),PT=[];
 function panelTex(it,port){const W=port?700:1000,fs=port?46:40,c=document.createElement('canvas'),g=c.getContext('2d');c.width=W;
  const wrap=(txt,f)=>{g.font=f;const o=[];let l='';for(const w of txt.split(' ')){const tt=l?l+' '+w:w;if(g.measureText(tt).width>W-90&&l){o.push(l);l=w}else l=tt}o.push(l);return o};
  const L=[],add=(txt,f,lh)=>wrap(txt,f).forEach(t=>L.push({t,f,lh}));
- if(it.h){add(it.h,`italic 700 ${fs*1.35}px Georgia,serif`,fs*1.9);add(it.s,`italic 500 ${fs*1.05}px Georgia,serif`,fs*1.6)}else add(it.p,`italic ${fs}px Georgia,serif`,fs*1.45);
+ if(it.h){add(it.h,`400 ${fs*1.35}px "Great Vibes",cursive`,fs*1.9);add(it.s,`500 ${fs*1.05}px "Playfair Display",serif`,fs*1.6)}else add(it.p,`400 ${fs}px "Poppins",sans-serif`,fs*1.45);
  const Hh=Math.ceil(L.reduce((a,l)=>a+l.lh,0)+70);c.height=Hh;g.textAlign='center';g.textBaseline='middle';g.lineJoin='round';let y=35;
  for(const l of L){y+=l.lh/2;g.font=l.f;g.lineWidth=fs*.28;g.strokeStyle='rgba(255,250,252,.92)';g.strokeText(l.t,W/2,y);g.fillStyle='#5a2650';g.fillText(l.t,W/2,y);y+=l.lh/2}
  const tx=new T.CanvasTexture(c);tx.minFilter=T.LinearFilter;tx.generateMipmaps=false;return{tex:tx,ratio:Hh/W}}
@@ -482,7 +486,8 @@ function startFirework(){
 }
 su.onclick=startFirework;document.getElementById('sp').onclick=startFirework;
 document.getElementById('fb').onclick=()=>{fin.classList.remove('on');fyT=2.5;td=28;tp=.22;lanOn=0};
-letterStartTimer=setTimeout(startLetter,6000);
+const gardenFontsReady=document.fonts?Promise.all([document.fonts.load('400 40px "Great Vibes"'),document.fonts.load('500 40px "Playfair Display"'),document.fonts.load('400 40px Poppins')]):Promise.resolve();
+letterStartTimer=setTimeout(()=>gardenFontsReady.then(startLetter),6000);
 // loop
 const clock=new T.Clock(),F=new T.Vector3();let started=false;
 window.beginGardenTour=shots=>{
@@ -701,7 +706,7 @@ function mkPlane(){const g=new T.Group(),w=0xf4f6fa,rd=mat(0xd83a4a);g.rotation.
  const th=new T.Mesh(new T.BoxGeometry(3,.1,1),mat(w));th.position.z=-2.8;g.add(th);const tf=new T.Mesh(new T.BoxGeometry(.1,1.4,1.1),rd);tf.position.set(0,.7,-2.8);g.add(tf);
  for(const s of[-1,1])P(g,0x88c8ff,s*.5,.2,1.2,.08,.12,.2);
  const prop=new T.Mesh(new T.BoxGeometry(2.3,.12,.06),mat(0x222222));prop.position.z=3.75;g.add(prop);
- const bc=document.createElement('canvas');bc.width=1024;bc.height=200;const bg=bc.getContext('2d');bg.fillStyle='#ffd6e6';bg.fillRect(0,0,1024,200);bg.strokeStyle='#e0507a';bg.lineWidth=10;bg.strokeRect(5,5,1014,190);bg.fillStyle='#b3234f';bg.font='italic 700 88px Georgia,serif';bg.textAlign='center';bg.textBaseline='middle';bg.fillText('Happy Birthday Kochussey ❤',512,104);
+ const bc=document.createElement('canvas');bc.width=1024;bc.height=200;const bg=bc.getContext('2d');bg.fillStyle='#ffd6e6';bg.fillRect(0,0,1024,200);bg.strokeStyle='#e0507a';bg.lineWidth=10;bg.strokeRect(5,5,1014,190);bg.fillStyle='#b3234f';bg.font='700 88px "Playfair Display",serif';bg.textAlign='center';bg.textBaseline='middle';bg.fillText('Happy Birthday Kochussey ❤',512,104);
  const bn=new T.Mesh(new T.PlaneGeometry(16,3.1),new T.MeshBasicMaterial({map:new T.CanvasTexture(bc),side:T.DoubleSide}));bn.rotation.y=-PI/2;bn.position.set(0,-.3,-12.4);g.add(bn);
  g.scale.setScalar(1.5);return{g,prop,bn}}
 function mkRocket(){const g=new T.Group(),w=mat(0xf2f4f8),r=mat(0xe03a4e);
